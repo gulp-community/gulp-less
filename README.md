@@ -1,7 +1,10 @@
+
 gulp-less
 =========
 
 A LESS plugin for Gulp
+
+[![Build Status](https://travis-ci.org/plus3network/gulp-less.png?branch=master)](https://travis-ci.org/plus3network/gulp-less)
 
 ## Install
 
