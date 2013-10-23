@@ -22,10 +22,10 @@ module.exports = function (options) {
     var parser = new less.Parser(opts);
     parser.parse(newFile.contents.toString('utf8'), function (err, tree) {
       if (err) return done(err);
-      newFile.contents = new Buffer(tree.toCSS({ compress: opts.compress }));
+      newFile.contents = new Buffer(tree.toCSS(opts));
       done(null, newFile);
     });
-  };
+  }
 
   return es.map(parseLess);
 };
