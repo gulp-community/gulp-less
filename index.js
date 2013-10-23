@@ -10,7 +10,7 @@ module.exports = function (options) {
   function parseLess (file, done) {
     var newFile = clone(file);
     newFile.path = util.replaceExtension(newFile.path, '.css');
-    newFile.shortened = util.replaceExtension(newFile.shortened, '.css');
+    newFile.shortened = util.replaceExtension(path.basename(newFile.path), '.css');
   
     // set the default options
     var opts = _.defaults(options || {}, {
