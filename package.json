@@ -23,7 +23,7 @@
     "event-stream": "~3.0.15",
     "less": "~1.5.0",
     "gulp-util": "~1.2.0",
-    "lodash.defaults": "*"
+    "lodash.defaults": "~2.4.1"
   },
   "devDependencies": {
     "should": "~1.2.2",
