@@ -2,7 +2,7 @@ var es = require('event-stream');
 var less = require('less');
 var gutil = require('gulp-util');
 var path = require('path');
-var _ = require('lodash');
+var defaults = require('lodash.defaults');
 
 module.exports = function (options) {
 
@@ -10,7 +10,7 @@ module.exports = function (options) {
     file.path = gutil.replaceExtension(file.path, '.css');
 
     // set the default options
-    var opts = _.defaults(options || {}, {
+    var opts = defaults(options || {}, {
       compress: false,
       filename: file.path,
       paths: [ path.dirname(file.path) ]
