@@ -1,4 +1,3 @@
-
 gulp-less
 =========
 
@@ -14,14 +13,25 @@ npm install gulp-less
 
 ## Usage
 ```javascript
-var less = require('gulp-less');
-var path = require('path');
+var gulp = require('gulp'),
+	less = require('gulp-less');
 
 gulp.task('less', function () {
-  gulp.files('./less/**/*.less')
-    .pipe(less({ compress: true, paths: [ path.join(__dirname, 'less', 'includes') ]))
-    .pipe(gulp.foler('./public/css'));
+	var lessOptions = {
+		compress: true
+	};
+
+	gulp.src('less/**/*.less')
+		.pipe(less(lessOptions))
+		.pipe(gulp.dest('public/css'));
 });
+
+gulp.task('default', function () {
+	gulp.watch('less/**/*.less', function () {
+		gulp.run('less');
+	});
+});
+
 ```
 
 ## Options
