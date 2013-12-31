@@ -18,14 +18,16 @@ var path = require('path');
 
 gulp.task('less', function () {
   gulp.src('./less/**/*.less')
-    .pipe(less({ compress: true, paths: [ path.join(__dirname, 'less', 'includes') ]))
+    .pipe(less({
+      paths: [ path.join(__dirname, 'less', 'includes') ]
+    }))
     .pipe(gulp.dest('./public/css'));
 });
 ```
 
 ## Options
 
-The options are the same as what's supported by the less parser.
+The options are the same as what's supported by the less parser. `compress` is disabled though - use another plugin for CSS compression
 
 ## License
 
