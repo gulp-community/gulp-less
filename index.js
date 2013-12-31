@@ -10,8 +10,6 @@ module.exports = function (options) {
     if (file.isNull()) return cb(null, file); // pass along
     if (file.isStream()) return cb(new Error("gulp-less: Streaming not supported"));
 
-    file.path = gutil.replaceExtension(file.path, '.css');
-
     // set the default options
     var opts = defaults(options || {}, {
       filename: file.path,
@@ -26,6 +24,7 @@ module.exports = function (options) {
     parser.parse(str, function (err, tree) {
       if (err) return done(err);
       file.contents = new Buffer(tree.toCSS(opts));
+      file.path = gutil.replaceExtension(file.path, '.css');
       done(null, file);
     });
   }
