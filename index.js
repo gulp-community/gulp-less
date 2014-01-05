@@ -5,6 +5,9 @@ var path = require('path');
 var defaults = require('lodash.defaults');
 var BufferStreams = require('bufferstreams');
 
+// Consts
+const PLUGIN_NAME = 'gulp-less';
+
 // Options
 function parseOptions(file, options) {
   // set the default options
@@ -27,7 +30,7 @@ function lessTransform(opts) {
 
     // Handle any error
     if(err) {
-      cb(new gutil.PluginError('less', err, {showStack: true}));
+      cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
     }
 
     // Use the buffered content
@@ -35,7 +38,7 @@ function lessTransform(opts) {
     var str = buf.toString('utf8');
     parser.parse(str, function (err, tree) {
       if (err) {
-        cb(new gutil.PluginError('less', err, {showStack: true}));
+        cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
       }
       buf = new Buffer(tree.toCSS(opts));
       cb(null, buf);
@@ -65,7 +68,7 @@ function lessGulp(options) {
     var str = file.contents.toString('utf8');
     parser.parse(str, function (err, tree) {
       if (err) {
-        return done(new gutil.PluginError('less', err, {showStack: true}));
+        return done(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
       }
       file.contents = new Buffer(tree.toCSS(opts));
       done(null, file);
