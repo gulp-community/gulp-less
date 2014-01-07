@@ -6,9 +6,10 @@ var defaults = require('lodash.defaults');
 
 module.exports = function (options) {
 
-  function parseLess (file, done) {
-    if (file.isNull()) return cb(null, file); // pass along
-    if (file.isStream()) return cb(new Error("gulp-less: Streaming not supported"));
+  function parseLess (file) {
+    var self = this;
+    if (file.isNull()) return self.emit('data', file); // pass along
+    if (file.isStream()) return self.emit('error', new Error("gulp-less: Streaming not supported"));
 
     // set the default options
     var opts = defaults(options || {}, {
@@ -22,14 +23,14 @@ module.exports = function (options) {
     var parser = new less.Parser(opts);
     var str = file.contents.toString('utf8');
     parser.parse(str, function (err, tree) {
-      if (err) return done(err);
+      if (err) return self.emit('error', err);
       file.contents = new Buffer(tree.toCSS(opts));
       file.path = gutil.replaceExtension(file.path, '.css');
-      done(null, file);
+      self.emit('data', file);
     });
   }
 
-  return es.map(parseLess);
+  return es.through(parseLess);
 };
 
 
