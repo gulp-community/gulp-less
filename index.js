@@ -1,6 +1,7 @@
 var es = require('event-stream');
 var less = require('less');
 var gutil = require('gulp-util');
+var PluginError = gutil.PluginError;
 var path = require('path');
 var defaults = require('lodash.defaults');
 
@@ -8,8 +9,8 @@ module.exports = function (options) {
 
   function parseLess (file) {
     var self = this;
-    if (file.isNull()) return self.emit('data', file); // pass along
-    if (file.isStream()) return self.emit('error', new Error("gulp-less: Streaming not supported"));
+    if (file.isNull()) return this.queue(file); // pass along
+    if (file.isStream()) return self.emit('error', new PluginError('gulp-less', 'Streaming not supported'));
 
     // set the default options
     var opts = defaults(options || {}, {
@@ -23,10 +24,10 @@ module.exports = function (options) {
     var parser = new less.Parser(opts);
     var str = file.contents.toString('utf8');
     parser.parse(str, function (err, tree) {
-      if (err) return self.emit('error', err);
+      if (err) return self.emit('error', new PluginError('gulp-less', err));
       file.contents = new Buffer(tree.toCSS(opts));
       file.path = gutil.replaceExtension(file.path, '.css');
-      self.emit('data', file);
+      self.queue(file);
     });
   }
 
