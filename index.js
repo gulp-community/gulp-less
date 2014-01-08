@@ -30,7 +30,7 @@ function lessTransform(opts) {
 
     // Handle any error
     if(err) {
-      cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
+      return cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
     }
 
     // Use the buffered content
@@ -38,7 +38,7 @@ function lessTransform(opts) {
     var str = buf.toString('utf8');
     parser.parse(str, function (err, tree) {
       if (err) {
-        cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
+        return cb(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
       }
       buf = new Buffer(tree.toCSS(opts));
       cb(null, buf);
