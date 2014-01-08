@@ -1,4 +1,4 @@
-var es = require('event-stream');
+var through = require('through');
 var less = require('less');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
@@ -31,7 +31,7 @@ module.exports = function (options) {
     });
   }
 
-  return es.through(parseLess);
+  return through(parseLess);
 };
 
 
