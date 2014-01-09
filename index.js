@@ -20,6 +20,7 @@ module.exports = function (options) {
 
     // let people use their own compressor
     delete opts.compress;
+    this.pause();
 
     var parser = new less.Parser(opts);
     var str = file.contents.toString('utf8');
@@ -28,6 +29,7 @@ module.exports = function (options) {
       file.contents = new Buffer(tree.toCSS(opts));
       file.path = gutil.replaceExtension(file.path, '.css');
       self.queue(file);
+      self.resume();
     });
   }
 
