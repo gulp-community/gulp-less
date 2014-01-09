@@ -25,7 +25,10 @@ module.exports = function (options) {
     var parser = new less.Parser(opts);
     var str = file.contents.toString('utf8');
     parser.parse(str, function (err, tree) {
-      if (err) return self.emit('error', new PluginError('gulp-less', err));
+      if (err) {
+        self.emit('error', new PluginError('gulp-less', err));
+        return self.resume();
+      }
       file.contents = new Buffer(tree.toCSS(opts));
       file.path = gutil.replaceExtension(file.path, '.css');
       self.emit('data', file);
