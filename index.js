@@ -28,7 +28,7 @@ module.exports = function (options) {
       if (err) return self.emit('error', new PluginError('gulp-less', err));
       file.contents = new Buffer(tree.toCSS(opts));
       file.path = gutil.replaceExtension(file.path, '.css');
-      self.queue(file);
+      self.emit('data', file);
       self.resume();
     });
   }
