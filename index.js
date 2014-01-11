@@ -31,7 +31,6 @@ module.exports = function (options) {
       file.contents = new Buffer(css);
       file.path = gutil.replaceExtension(file.path, '.css');
       self.emit('data', file);
-      self.resume();
     });
   }
 
