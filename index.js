@@ -24,10 +24,9 @@ module.exports = function (options) {
 
     var opts = defaults(options || {}, {
       filename: file.path,
+      compress: false,
       paths: [ path.dirname(file.path) ]
     });
-    // let people use their own compressor
-    delete opts.compress;
 
     less.render(str, opts, function (err, css) {
       if (err) {
