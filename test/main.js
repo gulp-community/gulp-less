@@ -22,7 +22,7 @@ describe('gulp-less', function () {
       var stream = less();
       var emptyFile = {
         isNull: function () { return true; }
-      }
+      };
       stream.on('data', function (data) {
         data.should.equal(emptyFile);
         done();
@@ -35,7 +35,7 @@ describe('gulp-less', function () {
       var streamFile = {
         isNull: function () { return false; },
         isStream: function () { return true; }
-      }
+      };
       stream.on('error', function (err) {
         err.message.should.equal('Streaming not supported');
         done();
@@ -65,7 +65,7 @@ describe('gulp-less', function () {
       var errorFile = createVinyl('somefile.less',
         new Buffer('html { color: @undefined-variable; }'));
       stream.on('error', function (err) {
-        err.message.should.equal('variable @undefined-variable is undefined');
+        err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
         done();
       });
       stream.write(errorFile);
@@ -82,7 +82,7 @@ describe('gulp-less', function () {
       var dataHandled = false;
 
       stream.on('error', function (err) {
-        err.message.should.equal('variable @undefined-variable is undefined');
+        err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
         errorHandled = true;
         if (dataHandled) {
           done();
@@ -93,7 +93,7 @@ describe('gulp-less', function () {
         if (errorHandled) {
           done();
         }
-      })
+      });
       stream.write(errorFile);
       stream.write(normalFile);
     });
@@ -103,7 +103,7 @@ describe('gulp-less', function () {
         createVinyl('buttons.less'),
         createVinyl('forms.less'),
         createVinyl('normalize.less')
-      ]
+      ];
 
       var stream = less();
       var count = files.length;
@@ -118,7 +118,7 @@ describe('gulp-less', function () {
 
       files.forEach(function (file) {
         stream.write(file);
-      })
+      });
     });
   });
 });

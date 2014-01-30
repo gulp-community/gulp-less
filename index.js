@@ -36,7 +36,7 @@ module.exports = function (options) {
         err.fileName = err.filename;
 
         // add a better error message
-        err.message = err.message + 'in file: ' + err.fileName + ' (' + err.lineNumber + ')';
+        err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
         self.emit('error', new PluginError('gulp-less', err));
       } else {
