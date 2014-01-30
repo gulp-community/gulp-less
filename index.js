@@ -32,12 +32,12 @@ module.exports = function (options) {
       if (err) {
         
         // convert the keys so PluginError can read them
-      	err.lineNumber = err.line;
-      	err.fileName = err.filename;
+        err.lineNumber = err.line;
+        err.fileName = err.filename;
 
-      	// add a better error message
-      	err.message = err.message + 'in file: ' + err.fileName + ' (' + err.lineNumber + ')';
-      	
+        // add a better error message
+        err.message = err.message + 'in file: ' + err.fileName + ' (' + err.lineNumber + ')';
+
         self.emit('error', new PluginError('gulp-less', err));
       } else {
         file.contents = new Buffer(css);
