@@ -29,6 +29,10 @@ gulp.task('less', function () {
 
 The options are the same as what's supported by the less parser. `compress` is disabled though - use another plugin for CSS compression
 
+## Error handling
+
+By default, a gulp task will fail and all streams will halt when an error happens. To change this behavior check out the error handling documentation [here](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)
+
 ## License
 
 (MIT License)
