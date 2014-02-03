@@ -20,7 +20,7 @@ gulp.task('less', function () {
   gulp.src('./less/**/*.less')
     .pipe(less({
       paths: [ path.join(__dirname, 'less', 'includes') ]
-    }))
+    })).on('error', gutil.log)
     .pipe(gulp.dest('./public/css'));
 });
 ```
