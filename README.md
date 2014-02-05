@@ -27,7 +27,7 @@ gulp.task('less', function () {
 
 ## Options
 
-The options are the same as what's supported by the less parser. `compress` is disabled though - use another plugin for CSS compression
+The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
 
 ## Error handling
 
