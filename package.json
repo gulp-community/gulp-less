@@ -1,6 +1,6 @@
 {
   "name": "gulp-less",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Less for Gulp",
   "main": "index.js",
   "scripts": {
@@ -20,14 +20,14 @@
   "readmeFilename": "README.md",
   "gitHead": "507383fe7771a092e8a7bcb23a9bd33c1904ce34",
   "dependencies": {
-    "less": "~1.7.0",
-    "gulp-util": "~2.2.14",
-    "lodash.defaults": "~2.4.1",
-    "through2": "~0.4.0"
+    "less": "^1.7.0",
+    "gulp-util": "^2.2.14",
+    "lodash.defaults": "^2.4.1",
+    "through2": "^0.4.0"
   },
   "devDependencies": {
-    "should": "~2.1.1",
-    "mocha": "~1.16.2",
-    "jshint": "~2.4.1"
+    "should": "^2.1.1",
+    "mocha": "^1.16.2",
+    "jshint": "^2.4.1"
   }
 }
