@@ -6,6 +6,10 @@ var path = require('path');
 var defaults = require('lodash.defaults');
 
 module.exports = function (options) {
+  // Mixes in default options.
+  options = defaults(options || {}, {
+    compress: false,
+  });
 
   function transform (file, enc, next) {
     var self = this;
@@ -22,15 +26,15 @@ module.exports = function (options) {
 
     var str = file.contents.toString('utf8');
 
-    var opts = defaults(options || {}, {
-      filename: file.path,
-      compress: false,
-      paths: [ path.dirname(file.path) ]
-    });
+    // Clones the options object.
+    var opts = defaults({}, options);
+
+    // Injects the path of the current file.
+    opts.filename = file.path;
 
     less.render(str, opts, function (err, css) {
       if (err) {
-        
+
         // convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
