@@ -8,7 +8,7 @@ var defaults = require('lodash.defaults');
 module.exports = function (options) {
   // Mixes in default options.
   options = defaults(options || {}, {
-    compress: false,
+    compress: false
   });
 
   function transform (file, enc, next) {
@@ -31,6 +31,7 @@ module.exports = function (options) {
 
     // Injects the path of the current file.
     opts.filename = file.path;
+    opts.paths = opts.paths || [];
 
     less.render(str, opts, function (err, css) {
       if (err) {
