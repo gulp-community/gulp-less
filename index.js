@@ -9,6 +9,7 @@ module.exports = function (options) {
   // Mixes in default options.
   options = defaults(options || {}, {
     compress: false,
+    paths: []
   });
 
   function transform (file, enc, next) {
