@@ -120,5 +120,41 @@ describe('gulp-less', function () {
         stream.write(file);
       });
     });
+
+    it('should compile custom functions', function(done) {
+      var files = [
+        createVinyl('customFunctions.less')
+      ];
+
+      var stream = less({
+        customFunctions: {
+          'get-color': function(less, color) {
+            return 'red';
+          },
+          'multiple-args': function(less, arg1, arg2) {
+            return (((arg1.value * 1) + (arg2.value))) + arg1.unit.numerator[0];
+          },
+          'string-result': function(less, arg1) {
+              return "\"Hello\"";
+          }
+        }
+      });
+
+      var count = files.length;
+      stream.on('data', function (cssFile) {
+        should.exist(cssFile);
+        should.exist(cssFile.path);
+        should.exist(cssFile.relative);
+        should.exist(cssFile.contents);
+        String(cssFile.contents).should.equal(
+          fs.readFileSync(pj(__dirname, 'expect/customFunctions.css'), 'utf8'));
+
+        if (!--count) { done(); }
+      });
+
+      files.forEach(function (file) {
+        stream.write(file);
+      });
+    });
   });
 });

@@ -33,6 +33,17 @@ module.exports = function (options) {
     // Injects the path of the current file.
     opts.filename = file.path;
 
+    // Load custom functions
+    if (opts.customFunctions) {
+      Object.keys(opts.customFunctions).forEach(function(name) {
+        less.tree.functions[name.toLowerCase()] = function() {
+          var args = [].slice.call(arguments);
+          args.unshift(less);
+          return new less.tree.Anonymous(options.customFunctions[name].apply(this, args));
+        };
+      });
+    }
+
     less.render(str, opts, function (err, css) {
       if (err) {
 

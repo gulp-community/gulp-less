@@ -27,7 +27,9 @@ gulp.task('less', function () {
 
 ## Options
 
-The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
+The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing. 
+
+`options.customFunctions` Define custom functions to be available within your LESS stylesheets. The function's name must be lowercase. In the definition, the first argument is the less object, and subsequent arguments are from the less function call. Values passed to the function are types defined within less, the return value may be either one of them or primitive. See the LESS documentation for more information on the available types.
 
 ## Error handling
 
