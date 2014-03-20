@@ -29,6 +29,17 @@ gulp.task('less', function () {
 
 The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
 
+You can also pick a custom version of `less` with the `version` option. Example:
+
+```javascript
+gulp
+  .src(srcBlog)
+  .pipe(less({
+        version: 'node_modules/less',
+  }))
+  .pipe(gulp.dest(destDir));
+```
+
 ## Error handling
 
 By default, a gulp task will fail and all streams will halt when an error happens. To change this behavior check out the error handling documentation [here](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)

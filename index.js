@@ -1,4 +1,3 @@
-var less = require('less');
 var through2 = require('through2');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
@@ -9,11 +8,20 @@ module.exports = function (options) {
   // Mixes in default options.
   options = defaults(options || {}, {
     compress: false,
-    paths: []
+    paths: [],
+    version: 'less'
   });
 
-  function transform (file, enc, next) {
+  function transform(file, enc, next) {
     var self = this;
+    var less;
+
+    // load requested less version
+    try {
+      less = require(options.version);
+    } catch (err) {
+      less = require(path.join(process.cwd(), options.version));
+    }
 
     if (file.isNull()) {
       this.push(file); // pass along
@@ -33,24 +41,33 @@ module.exports = function (options) {
     // Injects the path of the current file.
     opts.filename = file.path;
 
-    less.render(str, opts, function (err, css) {
-      if (err) {
+    try {
+      less.render(str, opts, function (err, css) {
+        // some older less versions just throw errors instead of passing to callback
+        if (err) {
+          defaults(err, {
+            name: 'No error name provided',
+            message: 'No error message provided'
+          });
+          throw err;
+        } else {
+          file.contents = new Buffer(css);
+          file.path = gutil.replaceExtension(file.path, '.css');
+          self.push(file);
+        }
+        next();
+      });
+    } catch (err) {
+      // convert the keys so PluginError can read them
+      err.lineNumber = err.line;
+      err.fileName = err.filename;
 
-        // convert the keys so PluginError can read them
-        err.lineNumber = err.line;
-        err.fileName = err.filename;
+      // add a better error message
+      err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
-        // add a better error message
-        err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
-
-        self.emit('error', new PluginError('gulp-less', err));
-      } else {
-        file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
-        self.push(file);
-      }
+      self.emit('error', new PluginError('gulp-less', err));
       next();
-    });
+    }
   }
 
   return through2.obj(transform);
