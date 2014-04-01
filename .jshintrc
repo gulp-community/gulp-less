@@ -1,0 +1,20 @@
+{
+    "esnext": true,
+    "camelcase": true,
+    "curly": true,
+    "freeze": true,
+    "indent": 4,
+    "latedef": "nofunc",
+    "newcap": true,
+    "noarg": true,
+    "undef": true,
+    "unused": "vars",
+    "laxbreak": true,
+    "maxparams": 8,
+    "maxdepth": 6,
+    "maxlen": 120,
+    "boss": true,
+    "eqnull": true,
+    "node": true,
+    "predef": [ ]
+}

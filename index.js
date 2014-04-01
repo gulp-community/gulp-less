@@ -3,55 +3,82 @@ var through2 = require('through2');
 var gutil = require('gulp-util');
 var PluginError = gutil.PluginError;
 var path = require('path');
-var defaults = require('lodash.defaults');
+var applySourceMap = require('vinyl-sourcemaps-apply');
 
-module.exports = function (options) {
-  // Mixes in default options.
-  options = defaults(options || {}, {
-    compress: false,
-    paths: []
+var parseVariableOptions = function(options) {
+  var output = '';
+  Object.keys(options).forEach(function(key) {
+    output += '@' + key + ':' + options[key] + ';';
   });
+  return output;
+};
+module.exports = function (options) {
+  var _options = options || {};
 
-  function transform (file, enc, next) {
-    var self = this;
+  return through2.obj(function(file, enc, cb) {
+    var options = Object.create(_options);
+
+    if (typeof options.paths === 'function') {
+      options.paths = options.paths(file);
+    }
 
     if (file.isNull()) {
-      this.push(file); // pass along
-      return next();
+      return cb(null, file); // pass along
     }
 
     if (file.isStream()) {
-      this.emit('error', new PluginError('gulp-less', 'Streaming not supported'));
-      return next();
+      return cb(new PluginError('gulp-less', 'Streaming not supported'));
     }
 
-    var str = file.contents.toString('utf8');
+    // Injects the paths.
+    options.filename = options.filename || file.relative;
+    options.paths = options.paths || [path.dirname(file.path)];
 
-    // Clones the options object.
-    var opts = defaults({}, options);
+    var srcCode = file.contents.toString('utf8');
 
-    // Injects the path of the current file.
-    opts.filename = file.path;
+    // Equivalent to --modify-vars option.
+    // Properties under options.modifyVars are appended as less variables
+    // to override global variables.
+    if (options.modifyVars) {
+      var modifyVarsOutput = parseVariableOptions(options.modifyVars);
+      srcCode += modifyVarsOutput;
+    }
 
-    less.render(str, opts, function (err, css) {
+    if (file.sourceMap || options.sourceMap) {
+      options.sourceMap = true;
+      options.sourceMapBasepath = options.sourceMapBasepath || (file.cwd + '/' + file.base);
+      options.outputSourceFiles = true;
+      options.writeSourceMap = function(sourceMapContent) {
+        if (file.sourceMap) {
+          applySourceMap(file, sourceMapContent);
+          file.sourceMap.file = file.relative;
+        } else {
+          this.push(new gutil.File({
+            cwd: file.cwd,
+            base: file.base,
+            path: file.path + '.map',
+            contents: new Buffer(sourceMapContent)
+          }));
+        }
+      }.bind(this);
+    }
+
+
+    less.render(srcCode, options, function(err, css) {
       if (err) {
-
         // convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
+        var message = less.formatError(err);
 
-        // add a better error message
-        err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
+        err.message = message;
 
-        self.emit('error', new PluginError('gulp-less', err));
-      } else {
-        file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
-        self.push(file);
+        return cb(new PluginError('gulp-less', err));
       }
-      next();
-    });
-  }
 
-  return through2.obj(transform);
+      file.contents = new Buffer(css);
+      file.path = gutil.replaceExtension(file.path, '.css');
+      cb(null, file);
+    }.bind(this));
+  });
 };

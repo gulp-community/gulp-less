@@ -65,7 +65,8 @@ describe('gulp-less', function () {
       var errorFile = createVinyl('somefile.less',
         new Buffer('html { color: @undefined-variable; }'));
       stream.on('error', function (err) {
-        err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
+        err.message.should.equal('NameError: variable @undefined-variable is undefined in '
+                    + errorFile.relative + ' on line 1, column 15:\n1 html { color: @undefined-variable; }\n');
         done();
       });
       stream.write(errorFile);
@@ -82,7 +83,8 @@ describe('gulp-less', function () {
       var dataHandled = false;
 
       stream.on('error', function (err) {
-        err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
+        err.message.should.equal('NameError: variable @undefined-variable is undefined in '
+                    + errorFile.relative + ' on line 1, column 15:\n1 html { color: @undefined-variable; }\n');
         errorHandled = true;
         if (dataHandled) {
           done();
