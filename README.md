@@ -19,7 +19,8 @@ var path = require('path');
 gulp.task('less', function () {
   gulp.src('./less/**/*.less')
     .pipe(less({
-      paths: [ path.join(__dirname, 'less', 'includes') ]
+      strictMath: true,
+      strictUnits: true
     }))
     .pipe(gulp.dest('./public/css'));
 });
@@ -27,7 +28,53 @@ gulp.task('less', function () {
 
 ## Options
 
-The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
+The options are the same as what's supported by the less parser:
+
+### Parse options
+
+- `paths` : if not defined is `[path.dirname(file.path)]`
+- `optimization`
+- `filename` : if not defined is `file.relative`
+- `strictImports`
+- `syncImport`
+- `dumpLineNumbers`
+- `relativeUrls`
+- `rootpath`
+- `modifyVars` : inject less variables
+
+
+### Render options
+
+- `compress`
+- `cleancss`
+- `ieCompat`
+- `strictMath`
+- `strictUnits`
+- `sourceMapRootpath`
+- `sourceMapBasepath` : if not defined is `file.cwd + '/' + file.base`
+
+
+## Sourcemaps
+
+Install dependency to `gulp-sourcemaps`
+
+```
+npm install --save-dev gulp-sourcemaps
+```
+
+```js
+var less = require('gulp-less');
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('less', function() {
+    gulp.src('src/browser/main.less', { base: 'src/browser/' })
+        .pipe(sourcemaps.init())
+            .pipe(less({}).on('error', console.error))
+        .pipe(sourcemaps.write('maps/' , { sourceRoot: '/src/browser/' }))
+        .pipe(gulp.dest('public/dist'));
+});
+```
+
 
 ## Error handling
 
