@@ -46,7 +46,7 @@ module.exports = function (options) {
         self.emit('error', new PluginError('gulp-less', err));
       } else {
         file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
+        file.path = gutil.replaceExtension(file.path, opts.compress ? '.min.css' : '.css');
         self.push(file);
       }
       next();
