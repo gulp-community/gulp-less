@@ -33,6 +33,12 @@ module.exports = function (options) {
     // Injects the path of the current file.
     opts.filename = file.path;
 
+    // Modify vars
+    if (options.modifyVars !== undefined) {
+      var modifyVarsOutput = parseVariableOptions(options.modifyVars);
+      str += modifyVarsOutput;
+    }
+
     less.render(str, opts, function (err, css) {
       if (err) {
 
@@ -51,6 +57,14 @@ module.exports = function (options) {
       }
       next();
     });
+
+    function parseVariableOptions(options) {
+      var output = '';
+      for (var key in options) {
+          output += '@' + key + ':' + options[key] + ';';
+      }
+      return output;
+    }
   }
 
   return through2.obj(transform);
