@@ -12,6 +12,9 @@ module.exports = function (options) {
     paths: []
   });
 
+  // Add .bower_components to include paths.
+  options.paths.push('./bower_components')
+  
   function transform (file, enc, next) {
     var self = this;
 
