@@ -12,17 +12,13 @@ module.exports = function (options) {
     paths: []
   });
 
-  function transform (file, enc, next) {
-    var self = this;
-
+  function transform (file, enc, cb) {
     if (file.isNull()) {
-      this.push(file); // pass along
-      return next();
+      return cb(null, file);// pass along
     }
 
     if (file.isStream()) {
-      this.emit('error', new PluginError('gulp-less', 'Streaming not supported'));
-      return next();
+      return cb(new PluginError('gulp-less', 'Streaming not supported'));
     }
 
     var str = file.contents.toString('utf8');
@@ -43,13 +39,12 @@ module.exports = function (options) {
         // add a better error message
         err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
-        self.emit('error', new PluginError('gulp-less', err));
+        cb(new PluginError('gulp-less', err));
       } else {
         file.contents = new Buffer(css);
         file.path = gutil.replaceExtension(file.path, '.css');
-        self.push(file);
+        cb(null, file);
       }
-      next();
     });
   }
 
