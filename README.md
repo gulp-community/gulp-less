@@ -29,6 +29,13 @@ gulp.task('less', function () {
 
 The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
 
+You can use ```modifyVars``` option to override some vars.
+```javascript
+//...
+.pipe(less({modifyVars:{myVar:'10px'}}))
+//...
+```
+
 ## Error handling
 
 By default, a gulp task will fail and all streams will halt when an error happens. To change this behavior check out the error handling documentation [here](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)
