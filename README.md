@@ -14,20 +14,68 @@ npm install gulp-less
 ## Usage
 ```javascript
 var less = require('gulp-less');
-var path = require('path');
 
 gulp.task('less', function () {
   gulp.src('./less/**/*.less')
-    .pipe(less({
-      paths: [ path.join(__dirname, 'less', 'includes') ]
-    }))
     .pipe(gulp.dest('./public/css'));
 });
 ```
 
+
 ## Options
 
-The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
+The options are the same as what's supported by the less parser, with the exception of `sourceMapFilename`.  This option will do nothing.
+
+## Source maps
+
+Specifiying `sourceMap: true` will write an inline source map at the end of the file.
+
+```javascript
+var less = require('gulp-less');
+var path = require('path');
+
+gulp.task('javascript', function() {
+  gulp.src('./less/**/*.less')
+      .pipe(less({
+        paths: [ path.join(__dirname, 'less', 'includes') ]
+        sourcemap: true
+      }))
+    .pipe(gulp.dest('dist'));
+});
+```
+gulp-less can be used in tandem with [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate source maps for the less to css transition. You will need to initialize [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) prior to running gulp-less and write the source maps after. By default, gulp-sourcemaps writes the source maps inline in the compiled javascript files.
+
+```javascript
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('javascript', function() {
+  gulp.src('./less/**/*.less')
+    .pipe(sourcemaps.init())
+      .pipe(less({
+        sourcemap: true
+      }))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('dist'));
+});
+```
+
+To write source maps to a separate file, specify a relative path in the `sourcemaps.write()` function.
+
+```javascript
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('javascript', function() {
+  gulp.src('./less/**/*.less')
+    .pipe(sourcemaps.init())
+      .pipe(less({
+        paths: [ path.join(__dirname, 'less', 'includes') ]
+        sourcemap: true
+      }))
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('dist'));
+
+// will write the source map to ./dest/maps;
+```
 
 ## Error handling
 
