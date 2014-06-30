@@ -35,8 +35,11 @@ module.exports = function (options) {
     // Injects the path of the current file.
     opts.filename = file.path;
 
+    // Disables source maps
+    opts.sourceMap = false;
+    // Enables source maps if gulp-sourcemaps has been initted
     if (file.sourceMap) {
-      options.makeSourceMaps = true;
+      opts.sourceMap = true;
     }
 
     less.render(str, opts, function (err, css) {
