@@ -25,9 +25,40 @@ gulp.task('less', function () {
 });
 ```
 
+
 ## Options
 
-The options are the same as what's supported by the less parser. Please note that this plugin only generates inline sourcemaps (with `sourceMap: true`) - specifying a `sourceMapFilename` option will do nothing.
+The options are the same as what's supported by the less parser, with the exception of `sourceMapFilename` and `sourcemap`.  These options will do nothing.  Use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate sourcemaps.
+
+## Source maps
+
+gulp-less can be used in tandem with [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate source maps for the less to CSS transition. You will need to initialize [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) prior to running the gulp-less compiler and write the source maps after.
+
+```javascript
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.src('./less/**/*.less')
+  .pipe(sourcemaps.init())
+  .pipe(less())
+  .pipe(sourcemaps.write())
+  .pipe(gulp.dest('./public/css'));
+
+// will write the source maps inline in the compiled CSS files
+```
+
+By default, [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) writes the source maps inline in the compiled CSS files. To write them to a separate file, specify a relative file path in the `sourcemaps.write()` function.
+
+```javascript
+var sourcemaps = require('gulp-sourcemaps');
+
+gulp.src('./less/**/*.less')
+  .pipe(sourcemaps.init())
+  .pipe(less())
+  .pipe(sourcemaps.write('./maps'))
+  .pipe(gulp.dest('./public/css'));
+
+// will write the source maps to ./public/css/maps
+```
 
 ## Error handling
 
