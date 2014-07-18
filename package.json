@@ -25,7 +25,7 @@
     "lodash.defaults": "^2.4.1",
     "through2": "^0.5.1",
     "vinyl-sourcemaps-apply": "^0.1.1",
-    "convert-source-map": "^0.3.4"
+    "convert-source-map": "^0.4.0"
   },
   "devDependencies": {
     "should": "^3.1.3",
