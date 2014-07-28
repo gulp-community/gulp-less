@@ -39,7 +39,7 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
-    var modifyVarsOutput = parseVariableOptions(options['modifyVars']);
+    var modifyVarsOutput = parseVariableOptions(opts.modifyVars || {});
     if (modifyVarsOutput) {
       str += '\n';
       str += modifyVarsOutput;
@@ -75,7 +75,7 @@ module.exports = function (options) {
         cb(null, file);
       }
     });
-
+    
     function parseVariableOptions(options) {
       var output = '';
       options = options || {};
