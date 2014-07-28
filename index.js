@@ -42,6 +42,12 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
+    var modifyVarsOutput = parseVariableOptions(options['modifyVars']);
+    if (modifyVarsOutput) {
+      str += '\n';
+      str += modifyVarsOutput;
+    }
+
     less.render(str, opts, function (err, css) {
       if (err) {
 
@@ -74,6 +80,15 @@ module.exports = function (options) {
       }
       next();
     });
+
+
+    function parseVariableOptions(options) {
+      var output = '';
+      for (var key in options) {
+          output += '@' + key + ':\'' + options[key] + '\';';
+      }
+      return output;
+    }
   }
 
   return through2.obj(transform);
