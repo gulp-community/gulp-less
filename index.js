@@ -42,7 +42,7 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
-    var modifyVarsOutput = parseVariableOptions(options['modifyVars']);
+    var modifyVarsOutput = parseVariableOptions(opts.modifyVars || {});
     if (modifyVarsOutput) {
       str += '\n';
       str += modifyVarsOutput;
@@ -80,15 +80,14 @@ module.exports = function (options) {
       }
       next();
     });
+  }
 
-
-    function parseVariableOptions(options) {
-      var output = '';
-      for (var key in options) {
-          output += '@' + key + ':\'' + options[key] + '\';';
-      }
-      return output;
+  function parseVariableOptions(options) {
+    var output = '';
+    for (var key in options) {
+        output += '@' + key + ':\'' + options[key] + '\';';
     }
+    return output;
   }
 
   return through2.obj(transform);
