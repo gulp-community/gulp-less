@@ -25,22 +25,21 @@ module.exports = function (options) {
     }
 
     var parser = new less.Parser(options);
-    parser.parse(input, function (e, root) {
+    var done = function(e, root){
       if (e) { 
         return callback(e);
       }
 
-      // The rendered CSS string
-      var css;
       try {
-        css = root && root.toCSS && root.toCSS(options);
+        // The rendered CSS string
+        var css = root && root.toCSS && root.toCSS(options);
+        callback(null, css);
       }
       catch (err) { 
         return callback(err);
       }
-
-      callback(null, css);
-    }, options);
+    };
+    parser.parse(input, done, options);
   };
 
   return through2.obj(function(file, enc, cb) {
