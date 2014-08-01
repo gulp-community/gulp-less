@@ -34,8 +34,7 @@ module.exports = function (options) {
         // The rendered CSS string
         var css = root && root.toCSS && root.toCSS(options);
         callback(null, css);
-      }
-      catch (err) { 
+      } catch (err) { 
         return callback(err);
       }
     };
