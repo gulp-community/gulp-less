@@ -120,5 +120,23 @@ describe('gulp-less', function () {
         stream.write(file);
       });
     });
+
+    it("should accept modifyVars as parameter to override variable names in less files", function(done){
+      var file = createVinyl("modifyvars.less");
+      var options = {
+        modifyVars: {
+          "static-prefix": '"https://assets-cdn.github.com"'
+        }
+      }
+      var stream = less(options);
+
+      stream.on("data", function(cssFile){
+        cssFile.contents.toString("utf8").should.equal(
+          fs.readFileSync(pj(__dirname, 'expect/modifyvars.css'), 'utf8'));
+        done();
+      });
+
+      stream.write(file);
+    });
   });
 });

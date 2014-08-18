@@ -14,6 +14,33 @@ module.exports = function (options) {
     paths: []
   });
 
+  // Internal render method to account for less bug #1921
+  // https://github.com/less/less.js/pull/1921
+  var render = function(input, options, callback){
+    options = options || {};
+
+    if (typeof options === 'function') {
+        callback = options;
+        options = {};
+    }
+
+    var parser = new less.Parser(options);
+    var done = function(e, root){
+      if (e) { 
+        return callback(e);
+      }
+
+      try {
+        // The rendered CSS string
+        var css = root && root.toCSS && root.toCSS(options);
+        callback(null, css);
+      } catch (err) { 
+        return callback(err);
+      }
+    };
+    parser.parse(input, done, options);
+  };
+
   return through2.obj(function(file, enc, cb) {
 
     if (file.isNull()) {
@@ -39,7 +66,8 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
-    less.render(str, opts, function (err, css) {
+    // Use internal render method that creates a new less.Parser
+    render(str, opts, function (err, css) {
       if (err) {
 
         // Convert the keys so PluginError can read them
