@@ -7,7 +7,7 @@ var defaults = require('lodash.defaults');
 var convert = require('convert-source-map');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 
-module.exports = function (options) {
+module.exports = function (options, additionalData) {
   // Mixes in default options.
   options = defaults(options || {}, {
     compress: false,
@@ -39,7 +39,8 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
-    less.render(str, opts, function (err, css) {
+    var parser = new (less.Parser)(opts);
+    parser.parse(str, opts, function (err, css) {
       if (err) {
 
         // Convert the keys so PluginError can read them
@@ -68,7 +69,7 @@ module.exports = function (options) {
 
         cb(null, file);
       }
-    });
+    }, additionalData);
   });
 };
 
