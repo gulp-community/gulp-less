@@ -7,7 +7,7 @@ var defaults = require('lodash.defaults');
 var convert = require('convert-source-map');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 
-module.exports = function (options) {
+module.exports = function (options, additionalData) {
   // Mixes in default options.
   options = defaults(options || {}, {
     compress: false,
@@ -39,7 +39,8 @@ module.exports = function (options) {
       opts.sourceMap = true;
     }
 
-    less.render(str, opts, function (err, css) {
+    var parser = new (less.Parser)(opts);
+    var errCb = function (err, css) {
       if (err) {
 
         // Convert the keys so PluginError can read them
@@ -50,25 +51,35 @@ module.exports = function (options) {
         err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
         return cb(new PluginError('gulp-less', err));
-      } else {
-        file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
-
-        if (file.sourceMap) {
-          var comment = convert.fromSource(css);
-          if (comment) {
-            file.contents = new Buffer(convert.removeComments(css));
-            var sourceMap = comment.sourcemap;
-            for (var i = 0; i < sourceMap.sources.length; i++) {
-              sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
-            }
-            applySourceMap(file, sourceMap);
-          }
-        }
-
-        cb(null, file);
       }
-    });
+    };
+
+    parser.parse(str, function (e, root) {
+      if (e) { errCb(e); return; }
+      var css;
+      try {
+        css = root && root.toCSS && root.toCSS(options);
+      }
+      catch (err) { errCb(err); return; }
+
+      // all is ok
+      file.contents = new Buffer(css);
+      file.path = gutil.replaceExtension(file.path, '.css');
+
+      if (file.sourceMap) {
+        var comment = convert.fromSource(css);
+        if (comment) {
+          file.contents = new Buffer(convert.removeComments(css));
+          var sourceMap = comment.sourcemap;
+          for (var i = 0; i < sourceMap.sources.length; i++) {
+            sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
+          }
+          applySourceMap(file, sourceMap);
+        }
+      }
+
+      cb(null, file);
+    }, additionalData);
   });
 };
 
