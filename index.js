@@ -60,7 +60,7 @@ module.exports = function (options) {
             file.contents = new Buffer(convert.removeComments(css));
             var sourceMap = comment.sourcemap;
             for (var i = 0; i < sourceMap.sources.length; i++) {
-              sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
+              sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]).replace(/\\/g,"/");
             }
             applySourceMap(file, sourceMap);
           }
