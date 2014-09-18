@@ -112,7 +112,36 @@ describe('gulp-less', function () {
         should.exist(cssFile.path);
         should.exist(cssFile.relative);
         should.exist(cssFile.contents);
+        if (!--count) { done(); }
+      });
 
+      files.forEach(function (file) {
+        stream.write(file);
+      });
+    });
+
+    it('should provide target filename to sourcemap', function (done) {
+      var files = [
+        createVinyl('buttons.less'),
+        createVinyl('forms.less'),
+        createVinyl('normalize.less')
+      ] .map(function (file) {
+        file.sourceMap = {
+          file: '',
+          version : 3,
+          sourceRoot : "",
+          sources: [],
+          names: [],
+          mappings: ""
+        };
+
+        return file;
+      });
+
+      var stream = less();
+      var count = files.length;
+      stream.on('data', function (cssFile) {
+        should.exist(cssFile.sourceMap.file);
         if (!--count) { done(); }
       });
 
