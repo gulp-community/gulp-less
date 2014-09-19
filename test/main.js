@@ -142,12 +142,13 @@ describe('gulp-less', function () {
       var count = files.length;
       stream.on('data', function (cssFile) {
         should.exist(cssFile.sourceMap.file);
-        if (!--count) { done(); }
       });
+      stream.on('end', done);
 
       files.forEach(function (file) {
         stream.write(file);
       });
+      stream.end();
     });
   });
 });
