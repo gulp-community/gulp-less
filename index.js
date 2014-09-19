@@ -62,6 +62,7 @@ module.exports = function (options) {
             for (var i = 0; i < sourceMap.sources.length; i++) {
               sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
             }
+            sourceMap.file = file.relative;
             applySourceMap(file, sourceMap);
           }
         }
