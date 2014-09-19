@@ -50,8 +50,9 @@ module.exports = function (options) {
       options.outputSourceFiles = true;
       options.writeSourceMap = function(sourceMapContent) {
         if (file.sourceMap) {
-          applySourceMap(file, sourceMapContent);
-          file.sourceMap.file = file.relative;
+          var sourceMap = JSON.parse(sourceMapContent);
+          sourceMap.file = file.relative;
+          applySourceMap(file, sourceMap);
         } else {
           this.push(new gutil.File({
             cwd: file.cwd,
