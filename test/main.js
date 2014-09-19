@@ -129,10 +129,10 @@ describe('gulp-less', function () {
         file.sourceMap = {
           file: '',
           version : 3,
-          sourceRoot : "",
+          sourceRoot : '',
           sources: [],
           names: [],
-          mappings: ""
+          mappings: ''
         };
 
         return file;
