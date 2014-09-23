@@ -59,10 +59,10 @@ module.exports = function (options) {
           if (comment) {
             file.contents = new Buffer(convert.removeComments(css));
             var sourceMap = comment.sourcemap;
+            sourceMap.file = unixStylePath(file.relative);
             for (var i = 0; i < sourceMap.sources.length; i++) {
-              sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
+              sourceMap.sources[i] = unixStylePath(path.relative(file.base, sourceMap.sources[i]));
             }
-            sourceMap.file = file.relative;
             applySourceMap(file, sourceMap);
           }
         }
@@ -73,4 +73,6 @@ module.exports = function (options) {
   });
 };
 
-
+function unixStylePath(filePath) {
+  return filePath.split(path.sep).join('/');
+}
