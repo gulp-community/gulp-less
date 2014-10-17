@@ -66,8 +66,8 @@ module.exports = function (options, additionalData) {
         var css;
         try {
           css = root && root.toCSS && root.toCSS(opts);
-        } catch (err) {
-          return errCb(err);
+        } catch (e) {
+          return errCb(e);
         }
 
         file.contents = new Buffer(css);
