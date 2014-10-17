@@ -52,7 +52,6 @@ module.exports = function (options) {
         return cb(new PluginError('gulp-less', err));
       } else {
         file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
 
         if (file.sourceMap) {
           var comment = convert.fromSource(css);
@@ -67,6 +66,7 @@ module.exports = function (options) {
           }
         }
 
+        file.path = gutil.replaceExtension(file.path, '.css');
         cb(null, file);
       }
     });
