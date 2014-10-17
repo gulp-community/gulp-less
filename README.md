@@ -16,10 +16,15 @@ npm install gulp-less
 var less = require('gulp-less');
 var path = require('path');
 
-gulp.task('less', function () {
-  gulp.src('./less/**/*.less')
+gulp.task('styles', function () {
+  gulp.src('./styles/**/*.{css,less}')
     .pipe(less({
-      paths: [ path.join(__dirname, 'less', 'includes') ]
+      paths: [ path.join(__dirname, 'styles', 'includes') ],
+      verbose: true
+    }, {
+      modifyVars: {
+        textColor: 'blue'
+      }
     }))
     .pipe(gulp.dest('./public/css'));
 });
