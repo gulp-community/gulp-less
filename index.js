@@ -74,8 +74,9 @@ module.exports = function (options) {
         var message = less.formatError(err);
 
         err.message = message;
-
-        return cb(new PluginError('gulp-less', err));
+        
+        this.emit('error', new PluginError('gulp-less', err, {fileName: file.relative}));
+        return cb();
       }
 
       file.contents = new Buffer(css);
