@@ -23,7 +23,8 @@ module.exports = function (options) {
     }
 
     if (file.isNull()) {
-      return cb(null, file); // pass along
+      this.push(file);
+      return cb(); // pass along
     }
 
     if (file.isStream()) {
@@ -79,7 +80,8 @@ module.exports = function (options) {
 
       file.contents = new Buffer(css);
       file.path = gutil.replaceExtension(file.path, '.css');
-      cb(null, file);
+      this.push(file);
+      cb();
     }.bind(this));
   });
 };
