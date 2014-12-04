@@ -57,8 +57,10 @@ module.exports = function (options) {
           if (comment) {
             file.contents = new Buffer(convert.removeComments(css));
             var sourceMap = comment.sourcemap;
+            sourceMap.sourcesContent = [];
             for (var i = 0; i < sourceMap.sources.length; i++) {
               sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
+              sourceMap.sourcesContent.push(file.contents.toString());
             }
             sourceMap.file = file.relative;
             applySourceMap(file, sourceMap);
