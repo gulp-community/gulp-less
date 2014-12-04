@@ -22,7 +22,7 @@
   "dependencies": {
     "convert-source-map": "^0.4.0",
     "gulp-util": "^3.0.0",
-    "less": "^1.7.4",
+    "less": "^2.1.1",
     "lodash.defaults": "^2.4.1",
     "through2": "^0.5.1",
     "vinyl-sourcemaps-apply": "^0.1.1"

@@ -35,7 +35,7 @@ module.exports = function (options) {
     // Bootstrap source maps.
     opts.sourceMap = file.sourceMap ? true : false;
 
-    less.render(str, opts, function (err, css) {
+    less.render(str, opts, function (err, result) {
       if (err) {
 
         // Convert the keys so PluginError can read them
@@ -47,6 +47,8 @@ module.exports = function (options) {
 
         return cb(new PluginError('gulp-less', err));
       } else {
+        var css = result.css;
+        
         file.contents = new Buffer(css);
         file.path = gutil.replaceExtension(file.path, '.css');
 
