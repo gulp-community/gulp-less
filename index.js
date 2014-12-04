@@ -50,7 +50,6 @@ module.exports = function (options) {
         var css = result.css;
         
         file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
 
         if (file.sourceMap) {
           var comment = convert.fromSource(css);
@@ -65,6 +64,7 @@ module.exports = function (options) {
           }
         }
 
+        file.path = gutil.replaceExtension(file.path, '.css');
         cb(null, file);
       }
     });
