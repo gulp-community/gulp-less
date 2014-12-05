@@ -18,6 +18,7 @@ function createVinyl(lessFileName, contents) {
 
 describe('gulp-less', function () {
   describe('less()', function () {
+
     it('should pass file when it isNull()', function (done) {
       var stream = less();
       var emptyFile = {
@@ -71,33 +72,6 @@ describe('gulp-less', function () {
       stream.write(errorFile);
     });
 
-    it('should continue to process next files when less error occurs', function (done) {
-      var stream = less();
-
-      var errorFile = createVinyl('somefile.less',
-        new Buffer('html { color: @undefined-variable; }'));
-      var normalFile = createVinyl('buttons.less');
-
-      var errorHandled = false;
-      var dataHandled = false;
-
-      stream.on('error', function (err) {
-        err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
-        errorHandled = true;
-        if (dataHandled) {
-          done();
-        }
-      });
-      stream.on('data', function (cssFile) {
-        dataHandled = true;
-        if (errorHandled) {
-          done();
-        }
-      });
-      stream.write(errorFile);
-      stream.write(normalFile);
-    });
-
     it('should compile multiple less files', function (done) {
       var files = [
         createVinyl('buttons.less'),
@@ -120,7 +94,7 @@ describe('gulp-less', function () {
       });
     });
 
-    it('should provide target filename to sourcemap', function (done) {
+    it('should produce sourcemap filenames and mappings', function (done) {
       var files = [
         createVinyl('buttons.less'),
         createVinyl('forms.less'),
@@ -142,6 +116,8 @@ describe('gulp-less', function () {
       var count = files.length;
       stream.on('data', function (cssFile) {
         should.exist(cssFile.sourceMap.file);
+        should.exist(cssFile.sourceMap.mappings);
+        should(cssFile.sourceMap.mappings.length).be.greaterThan(1);
       });
       stream.on('end', done);
 
