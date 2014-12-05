@@ -30,6 +30,58 @@ gulp.task('less', function () {
 
 The options are the same as what's supported by the less parser, with the exception of `sourceMapFilename` and `sourcemap`.  These options will do nothing.  Use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate sourcemaps.
 
+## CleanCSS
+
+As of version 1.3.7 of gulp-less, less 2.0 is being used. Cleancss has been removed from LESS core, and has become a less plugin. If you would like to continue to use cleancss, you need to use it as a LESS plugin.
+
+```
+npm install less-plugin-clean-css --save-dev
+```
+
+```javascript
+var LessPluginCleanCSS = require("less-plugin-clean-css"),
+    cleancss = new cleancssPlugin({advanced: true});
+
+gulp.src('./less/**/*.less')
+  .pipe(less({
+    plugins: [cleancss]
+  }))
+  .pipe(gulp.dest('./public/css'));
+
+
+```
+
+See all options for cleancss here: https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically
+
+## Plugins
+
+If you are using version 1.3.7 or higher you will have the ability to use a growing set LESS plugins, potentially simplifying your build steps.
+
+Continuing on the cleancss as a plugin pattern, we can include the [autoprefix plugin](https://github.com/less/less-plugin-autoprefix).
+```
+npm install less-plugin-autoprefix --save-dev
+```
+
+```javascript
+var LessPluginCleanCSS = require("less-plugin-clean-css"),
+    cleancss = new cleancssPlugin({advanced: true});
+    
+var LessPluginAutoPrefix = require('less-plugin-autoprefix'),
+    autoprefix= new LessPluginAutoPrefix({browsers: ["last 2 versions"]});
+
+
+gulp.src('./less/**/*.less')
+  .pipe(less({
+    plugins: [autoprefix, cleancss]
+  }))
+  .pipe(gulp.dest('./public/css'));
+
+
+```
+
+More info on LESS plugins can be found at http://lesscss.org/usage/#plugins, including a current list of plugins.
+
+
 ## Source maps
 
 gulp-less can be used in tandem with [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate source maps for the less to CSS transition. You will need to initialize [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) prior to running the gulp-less compiler and write the source maps after.
