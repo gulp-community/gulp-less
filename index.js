@@ -31,13 +31,37 @@ module.exports = function (options) {
 
     // Injects the path of the current file.
     opts.filename = file.path;
-    
+
     // Bootstrap source maps.
-    opts.sourceMap = file.sourceMap ? true : false;
+    if (file.sourceMap) {
+      opts.sourceMap = {
+        sourceMapFileInline: true
+      };
+    }
 
-    less.render(str, opts, function (err, result) {
-      if (err) {
+    less.render(str, opts)
+      .then(function(result, opts){
+          var css = result.css;
 
+          file.contents = new Buffer(css);
+
+          if (file.sourceMap) {
+            var comment = convert.fromSource(css);
+            if (comment) {
+              file.contents = new Buffer(convert.removeComments(css));
+              var sourceMap = comment.sourcemap;
+              for (var i = 0; i < sourceMap.sources.length; i++) {
+                sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
+              }
+              sourceMap.file = file.relative;
+              applySourceMap(file, sourceMap);
+            }
+          }
+
+          file.path = gutil.replaceExtension(file.path, '.css');
+
+          cb(null, file);
+    }, function(err){
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
@@ -46,27 +70,6 @@ module.exports = function (options) {
         err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
         return cb(new PluginError('gulp-less', err));
-      } else {
-        var css = result.css;
-        
-        file.contents = new Buffer(css);
-        file.path = gutil.replaceExtension(file.path, '.css');
-
-        if (file.sourceMap) {
-          var comment = convert.fromSource(css);
-          if (comment) {
-            file.contents = new Buffer(convert.removeComments(css));
-            var sourceMap = comment.sourcemap;
-            for (var i = 0; i < sourceMap.sources.length; i++) {
-              sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
-            }
-            sourceMap.file = file.relative;
-            applySourceMap(file, sourceMap);
-          }
-        }
-
-        cb(null, file);
-      }
-    });
+      });
   });
 };
