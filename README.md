@@ -40,7 +40,7 @@ npm install less-plugin-clean-css --save-dev
 
 ```javascript
 var LessPluginCleanCSS = require("less-plugin-clean-css"),
-    cleancss = new cleancssPlugin({advanced: true});
+    cleancss = new LessPluginCleanCSS({advanced: true});
 
 gulp.src('./less/**/*.less')
   .pipe(less({
@@ -64,7 +64,7 @@ npm install less-plugin-autoprefix --save-dev
 
 ```javascript
 var LessPluginCleanCSS = require("less-plugin-clean-css"),
-    cleancss = new cleancssPlugin({advanced: true});
+    cleancss = new LessPluginCleanCSS({advanced: true});
     
 var LessPluginAutoPrefix = require('less-plugin-autoprefix'),
     autoprefix= new LessPluginAutoPrefix({browsers: ["last 2 versions"]});
