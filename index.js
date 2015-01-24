@@ -33,35 +33,24 @@ module.exports = function (options) {
     opts.filename = file.path;
 
     // Bootstrap source maps.
-    if (file.sourceMap) {
-      opts.sourceMap = {
-        sourceMapFileInline: true
-      };
-    }
 
+    if (file.sourceMap) {
+      opts.sourceMap = {};
+    }
+   
     less.render(str, opts)
       .then(function(result, opts){
           var css = result.css;
-
-          file.contents = new Buffer(css);
-
+          file.contents = new Buffer(convert.removeComments(css));
           file.path = gutil.replaceExtension(file.path, '.css');
-
-          if (file.sourceMap) {
-            var comment = convert.fromSource(css);
-            if (comment) {
-              file.contents = new Buffer(convert.removeComments(css));
-              var sourceMap = comment.sourcemap;
-              for (var i = 0; i < sourceMap.sources.length; i++) {
-                sourceMap.sources[i] = path.relative(file.base, sourceMap.sources[i]);
-              }
-              sourceMap.file = file.relative;
-              applySourceMap(file, sourceMap);
-            }
+          result.map = JSON.parse(result.map);
+          result.map.file = file.relative;
+          for (var i = 0; i < result.map.sources.length; i++) {
+                   if(typeof result.map.sources[i] !== "undefined") result.map.sources[i] = path.relative(file.base, result.map.sources[i]);
           }
-
-          cb(null, file);
-    }, function(err){
+          applySourceMap(file, result.map);
+       cb(null, file);   
+	   }, function(err){
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
