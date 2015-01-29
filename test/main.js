@@ -24,11 +24,12 @@ describe('gulp-less', function () {
       var emptyFile = {
         isNull: function () { return true; }
       };
-      stream.on('data', function (data) {
+      stream.once('data', function (data) {
         data.should.equal(emptyFile);
         done();
       });
       stream.write(emptyFile);
+      stream.end();
     });
 
     it('should emit error when file isStream()', function (done) {
@@ -37,18 +38,19 @@ describe('gulp-less', function () {
         isNull: function () { return false; },
         isStream: function () { return true; }
       };
-      stream.on('error', function (err) {
+      stream.once('error', function (err) {
         err.message.should.equal('Streaming not supported');
         done();
       });
       stream.write(streamFile);
+      stream.end();
     });
 
     it('should compile single less file', function (done) {
       var lessFile = createVinyl('buttons.less');
 
       var stream = less();
-      stream.on('data', function (cssFile) {
+      stream.once('data', function (cssFile) {
         should.exist(cssFile);
         should.exist(cssFile.path);
         should.exist(cssFile.relative);
@@ -59,17 +61,24 @@ describe('gulp-less', function () {
         done();
       });
       stream.write(lessFile);
+      stream.end();
     });
 
     it('should emit error when less contains errors', function (done) {
+      var errorCalled = false;
       var stream = less();
       var errorFile = createVinyl('somefile.less',
         new Buffer('html { color: @undefined-variable; }'));
-      stream.on('error', function (err) {
+      stream.once('error', function (err) {
         err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
+        errorCalled = true;
+      });
+      stream.once('end', function(){
+        errorCalled.should.equal(true);
         done();
       });
       stream.write(errorFile);
+      stream.end();
     });
 
     it('should compile multiple less files', function (done) {
@@ -92,6 +101,7 @@ describe('gulp-less', function () {
       files.forEach(function (file) {
         stream.write(file);
       });
+      stream.end();
     });
 
     it('should produce sourcemap filenames and mappings', function (done) {
@@ -119,7 +129,7 @@ describe('gulp-less', function () {
         should.exist(cssFile.sourceMap.mappings);
         should(cssFile.sourceMap.mappings.length).be.greaterThan(1);
       });
-      stream.on('end', done);
+      stream.once('end', done);
 
       files.forEach(function (file) {
         stream.write(file);
