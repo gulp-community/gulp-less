@@ -57,15 +57,17 @@ module.exports = function (options) {
 
           cb(null, file);
     }, function(err){
-        console.log(err);
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
 
         // Add a better error message
-        err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
+        var message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
+        var pluginErr = new PluginError('gulp-less', message);
 
-        cb(new PluginError('gulp-less', err), null);
+        gutil.log(pluginErr.toString());
+
+        cb(pluginErr, null);
       });
   });
 };
