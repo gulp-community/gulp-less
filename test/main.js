@@ -72,6 +72,8 @@ describe('gulp-less', function () {
       stream.once('error', function (err) {
         err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
         errorCalled = true;
+        errorCalled.should.equal(true);
+        done();
       });
       stream.once('end', function(){
         errorCalled.should.equal(true);
