@@ -3,6 +3,7 @@ var less = require('../');
 var gutil = require('gulp-util');
 var fs = require('fs');
 var pj = require('path').join;
+var sinon = require('sinon');
 
 function createVinyl(lessFileName, contents) {
   var base = pj(__dirname, 'fixtures');
@@ -136,6 +137,23 @@ describe('gulp-less', function () {
       files.forEach(function (file) {
         stream.write(file);
       });
+      stream.end();
+    });
+  });
+
+  describe('less.reporter', function () {
+    it('should print an error when less contains errors', function (done) {
+      var stream = less();
+      var errorFile = createVinyl('somefile.less',
+        new Buffer('html { \ncolor: @undefined-variable; \n}'));
+      stream.once('error', function(err) {
+        var logMock = sinon.mock(gutil).expects('log');
+        logMock.once();
+        less.reporter(err);
+        logMock.verify();
+        done();
+      });
+      stream.write(errorFile);
       stream.end();
     });
   });
