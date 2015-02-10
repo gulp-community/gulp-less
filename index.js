@@ -56,8 +56,7 @@ module.exports = function (options) {
           }
 
           cb(null, file);
-    }, function(err){
-        console.log(err);
+    }).catch(function(err){
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
@@ -65,7 +64,7 @@ module.exports = function (options) {
         // Add a better error message
         err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
-        cb(new PluginError('gulp-less', err), null);
-      });
+        throw new PluginError('gulp-less', err);
+    }).done(undefined, cb);
   });
 };
