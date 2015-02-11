@@ -19,7 +19,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "convert-source-map": "^0.4.0",
+    "accord": "^0.14.4",
     "gulp-util": "^3.0.1",
     "less": "^2.1.1",
     "object-assign": "^2.0.0",
