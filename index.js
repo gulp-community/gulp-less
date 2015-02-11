@@ -57,7 +57,6 @@ module.exports = function (options) {
 
           cb(null, file);
     }, function(err){
-        console.log(err);
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
