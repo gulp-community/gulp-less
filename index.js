@@ -1,11 +1,12 @@
-var path = require('path');
-var accord = require('accord');
-var through2 = require('through2');
-var gutil = require('gulp-util');
-var assign = require('object-assign');
+var path           = require('path');
+var accord         = require('accord');
+var through2       = require('through2');
+var gutil          = require('gulp-util');
+var assign         = require('object-assign');
 var applySourceMap = require('vinyl-sourcemaps-apply');
-var PluginError = gutil.PluginError;
-var less = accord.load('less');
+
+var PluginError    = gutil.PluginError;
+var less           = accord.load('less');
 
 module.exports = function (options) {
   // Mixes in default options.
