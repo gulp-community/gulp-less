@@ -40,31 +40,31 @@ module.exports = function (options) {
 
     less.render(str, opts)
       .then(function(result, opts){
-          file.contents = new Buffer(result.css);
-          file.path = gutil.replaceExtension(file.path, '.css');
+        file.contents = new Buffer(result.css);
+        file.path = gutil.replaceExtension(file.path, '.css');
 
-          if (file.sourceMap) {
-            var comment = convert.fromSource(result.css);
-            if (comment) {
-              file.contents = new Buffer(convert.removeComments(result.css));
-              comment.sourcemap.sources = comment.sourcemap.sources.map(function(src){
-                return path.relative(file.base, src);
-              });
-              comment.sourcemap.file = file.relative;
-              applySourceMap(file, comment.sourcemap);
-            }
+        if (file.sourceMap) {
+          var comment = convert.fromSource(result.css);
+          if (comment) {
+            file.contents = new Buffer(convert.removeComments(result.css));
+            comment.sourcemap.sources = comment.sourcemap.sources.map(function(src){
+              return path.relative(file.base, src);
+            });
+            comment.sourcemap.file = file.relative;
+            applySourceMap(file, comment.sourcemap);
           }
+        }
 
-          cb(null, file);
-    }, function(err){
-        // Convert the keys so PluginError can read them
-        err.lineNumber = err.line;
-        err.fileName = err.filename;
+        cb(null, file);
+    }).catch(function(err){
+      // Convert the keys so PluginError can read them
+      err.lineNumber = err.line;
+      err.fileName = err.filename;
 
-        // Add a better error message
-        err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
+      // Add a better error message
+      err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
-        cb(new PluginError('gulp-less', err), null);
-      });
+      throw new PluginError('gulp-less', err);
+    }).done(undefined, cb);
   });
 };
