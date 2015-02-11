@@ -57,6 +57,7 @@ module.exports = function (options) {
 
           cb(null, file);
     }, function(err){
+        console.log(err);
         // Convert the keys so PluginError can read them
         err.lineNumber = err.line;
         err.fileName = err.filename;
@@ -67,24 +68,4 @@ module.exports = function (options) {
         cb(new PluginError('gulp-less', err), null);
       });
   });
-};
-
-
-module.exports.reporter = function(err) {
-  var generateLine = function(line, lineNumber) {
-    // undefined means there is no line. For example, the 1st and 3rd element are
-    // undefined if the file contains only one-line.
-    return line !== undefined ? '\n        ' + lineNumber + ' ' + line : '';
-  };
-
-  var extract = err.extract;
-  var lineNumber = err.lineNumber;
-  var hint = [
-    generateLine(extract[0], lineNumber - 1),
-    generateLine(extract[1], lineNumber),
-    generateLine(extract[2], lineNumber + 1),
-  ].join('');
-
-  // Put the plugin name prefix to follow the gulp-way.
-  gutil.log('gulp-less: ' + err.message + '\n' + hint);
 };
