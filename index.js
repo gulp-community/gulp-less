@@ -9,10 +9,10 @@ var applySourceMap = require('vinyl-sourcemaps-apply');
 
 module.exports = function (options) {
   // Mixes in default options.
-  options = assign({}, options, {
-    compress: false,
-    paths: []
-  });
+  options = assign({}, {
+      compress: false,
+      paths: []
+    }, options);
 
   return through2.obj(function(file, enc, cb) {
     if (file.isNull()) {
