@@ -1,3 +1,6 @@
+### 3.0.0
+- Switch to using [accord](https://github.com/jenius/accord) for options parsing
+
 ### 2.0.3
 
 - Fix less errors by using promises correctly

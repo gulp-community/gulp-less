@@ -1,11 +1,12 @@
-var path = require('path');
-var less = require('less');
-var through2 = require('through2');
-var gutil = require('gulp-util');
-var PluginError = gutil.PluginError;
-var assign = require('object-assign');
-var convert = require('convert-source-map');
+var path           = require('path');
+var accord         = require('accord');
+var through2       = require('through2');
+var gutil          = require('gulp-util');
+var assign         = require('object-assign');
 var applySourceMap = require('vinyl-sourcemaps-apply');
+
+var PluginError    = gutil.PluginError;
+var less           = accord.load('less');
 
 module.exports = function (options) {
   // Mixes in default options.
@@ -25,38 +26,26 @@ module.exports = function (options) {
 
     var str = file.contents.toString();
 
-    // Clones the options object.
+    // Clones the options object
     var opts = assign({}, options);
 
-    // Injects the path of the current file.
+    // Injects the path of the current file
     opts.filename = file.path;
 
-    // Bootstrap source maps.
-    if (file.sourceMap) {
-      opts.sourceMap = {
-        sourceMapFileInline: true
-      };
-    }
+    // Bootstrap source maps
+    if (file.sourceMap) { opts.sourcemap = true; }
 
-    less.render(str, opts)
-      .then(function(result, opts){
-        file.contents = new Buffer(result.css);
-        file.path = gutil.replaceExtension(file.path, '.css');
-
-        if (file.sourceMap) {
-          var comment = convert.fromSource(result.css);
-          if (comment) {
-            file.contents = new Buffer(convert.removeComments(result.css));
-            comment.sourcemap.sources = comment.sourcemap.sources.map(function(src){
-              return path.relative(file.base, src);
-            });
-            comment.sourcemap.file = file.relative;
-            applySourceMap(file, comment.sourcemap);
-          }
-        }
-
-        cb(null, file);
-    }).catch(function(err){
+    less.render(str, opts).then(function(res) {
+      file.contents = new Buffer(res.result);
+      file.path = gutil.replaceExtension(file.path, '.css');
+      if (res.sourcemap) {
+        res.sourcemap.file = file.path;
+        applySourceMap(file, res.sourcemap);
+      }
+      return file;
+    }).then(function(file) {
+      cb(null, file); 
+    }).catch(function(err) {
       // Convert the keys so PluginError can read them
       err.lineNumber = err.line;
       err.fileName = err.filename;

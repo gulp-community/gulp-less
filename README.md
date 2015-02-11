@@ -3,16 +3,18 @@ gulp-less
 
 A LESS plugin for Gulp
 
-[![Build Status](https://travis-ci.org/plus3network/gulp-less.png?branch=master)](https://travis-ci.org/plus3network/gulp-less)
+[![NPM Version](https://img.shields.io/npm/v/gulp-less.svg)](https://www.npmjs.com/package/gulp-less)
+[![Build Status](https://img.shields.io/travis/plus3network/gulp-less.svg)](https://travis-ci.org/plus3network/gulp-less)
 
-## Install
+## Installation
 
 ```
 npm install gulp-less
 ```
 
-## Usage
-```javascript
+## Basic Usage
+
+```js
 var less = require('gulp-less');
 var path = require('path');
 
@@ -25,68 +27,65 @@ gulp.task('less', function () {
 });
 ```
 
-
 ## Options
 
-The options are the same as what's supported by the less parser, with the exception of `sourceMapFilename` and `sourcemap`.  These options will do nothing.  Use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate sourcemaps.
+The options you can use [can be found here](http://lesscss.org/#using-less-configuration). Below is a list of valid options as of the time of writing:
 
-## CleanCSS
+- `paths`: Array of paths to be used for `@import` directives
+- `plugins`: Array of less plugins ([details](#using-plugins))
 
-As of version 1.3.7 of gulp-less, less 2.0 is being used. Cleancss has been removed from LESS core, and has become a less plugin. If you would like to continue to use cleancss, you need to use it as a LESS plugin.
+The `filename` option is not necessary, it's handled automatically by this plugin. The `compress` option is not supported -- if you are trying to minify your css, use [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css). No `sourceMap` options are supported -- if you are trying to generate sourcemaps, use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).
 
-```
-npm install less-plugin-clean-css --save-dev
-```
+## Minifying CSS
 
-```javascript
-var LessPluginCleanCSS = require("less-plugin-clean-css"),
-    cleancss = new LessPluginCleanCSS({advanced: true});
+If you want to minify/compress your css, you can use either the [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css) plugin for gulp, or the [less-clean-css](https://github.com/less/less-plugin-clean-css) plugin for less. Examples of both are shown below:
+
+```js
+// Using a less plugin to minify css
+var LessPluginCleanCSS = require('less-plugin-clean-css'),
+    cleancss = new LessPluginCleanCSS({ advanced: true });
 
 gulp.src('./less/**/*.less')
   .pipe(less({
     plugins: [cleancss]
   }))
   .pipe(gulp.dest('./public/css'));
-
-
 ```
 
-See all options for cleancss here: https://github.com/jakubpawlowicz/clean-css#how-to-use-clean-css-programmatically
+```js
+// Using a gulp plugin to minify css
+var minifyCSS = require('gulp-minify-css');
 
-## Plugins
-
-If you are using version 1.3.7 or higher you will have the ability to use a growing set LESS plugins, potentially simplifying your build steps.
-
-Continuing on the cleancss as a plugin pattern, we can include the [autoprefix plugin](https://github.com/less/less-plugin-autoprefix).
+gulp.src('./less/**/*.less')
+  .pipe(less())
+  .pipe(minifyCSS())
+  .pipe(gulp.dest('./public/css'));
 ```
-npm install less-plugin-autoprefix --save-dev
-```
 
-```javascript
-var LessPluginCleanCSS = require("less-plugin-clean-css"),
-    cleancss = new LessPluginCleanCSS({advanced: true});
-    
-var LessPluginAutoPrefix = require('less-plugin-autoprefix'),
-    autoprefix= new LessPluginAutoPrefix({browsers: ["last 2 versions"]});
+## Using Plugins
 
+Less now supports plugins, which can add additional functionality like minifying css as shown above. Here's an example of how to use plugins with `gulp-less` using both the [clean-css plugin](https://github.com/less/less-plugin-clean-css) and the [autoprefix plugin](https://github.com/less/less-plugin-autoprefix).
+
+```js
+var LessPluginCleanCSS = require('less-plugin-clean-css'),
+    LessPluginAutoPrefix = require('less-plugin-autoprefix'),
+    cleancss = new LessPluginCleanCSS({ advanced: true }),
+    autoprefix= new LessPluginAutoPrefix({ browsers: ["last 2 versions"] });
 
 gulp.src('./less/**/*.less')
   .pipe(less({
     plugins: [autoprefix, cleancss]
   }))
   .pipe(gulp.dest('./public/css'));
-
-
 ```
 
-More info on LESS plugins can be found at http://lesscss.org/usage/#plugins, including a current list of plugins.
+More info on LESS plugins can be found at http://lesscss.org/usage/#plugins, including a current list of all available plugins.
 
+## Source Maps
 
-## Source maps
+`gulp-less` can be used in tandem with [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate source maps for your files. You will need to initialize [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) prior to running the gulp-less compiler and write the source maps after, as such:
 
-gulp-less can be used in tandem with [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) to generate source maps for the less to CSS transition. You will need to initialize [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) prior to running the gulp-less compiler and write the source maps after.
-
-```javascript
+```js
 var sourcemaps = require('gulp-sourcemaps');
 
 gulp.src('./less/**/*.less')
@@ -94,13 +93,11 @@ gulp.src('./less/**/*.less')
   .pipe(less())
   .pipe(sourcemaps.write())
   .pipe(gulp.dest('./public/css'));
-
-// will write the source maps inline in the compiled CSS files
 ```
 
-By default, [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) writes the source maps inline in the compiled CSS files. To write them to a separate file, specify a relative file path in the `sourcemaps.write()` function.
+By default, [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps) writes the source maps inline in the compiled CSS files. To write them to a separate file, specify a relative file path in the `sourcemaps.write()` function, as such:
 
-```javascript
+```js
 var sourcemaps = require('gulp-sourcemaps');
 
 gulp.src('./less/**/*.less')
@@ -108,11 +105,9 @@ gulp.src('./less/**/*.less')
   .pipe(less())
   .pipe(sourcemaps.write('./maps'))
   .pipe(gulp.dest('./public/css'));
-
-// will write the source maps to ./public/css/maps
 ```
 
-## Error handling
+## Error Handling
 
 By default, a gulp task will fail and all streams will halt when an error happens. To change this behavior check out the error handling documentation [here](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)
 
