@@ -4,7 +4,7 @@
   "description": "Less for Gulp",
   "main": "index.js",
   "scripts": {
-    "test": "jshint index.js && node_modules/.bin/mocha -R spec"
+    "test": "jshint index.js && node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
