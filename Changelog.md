@@ -1,3 +1,6 @@
+### 3.0.1
+- Bumped accord version to 0.15.1 to fix #122
+
 ### 3.0.0
 - Switch to using [accord](https://github.com/jenius/accord) for options parsing
 
