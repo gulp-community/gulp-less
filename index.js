@@ -41,7 +41,7 @@ module.exports = function (options) {
         file.path = gutil.replaceExtension(file.path, '.css');
         if (res.sourcemap) {
             res.sourcemap.file = file.path;
-            res.sourcemap.sources = res.sourcemap.sources.map(function(filePath) {
+            res.sourcemap.sources = res.sourcemap.sources.map(function() {
                 return file.relPath;
             });
             applySourceMap(file, res.sourcemap);
