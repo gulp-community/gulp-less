@@ -29,17 +29,21 @@ module.exports = function (options) {
     // Clones the options object
     var opts = assign({}, options);
 
-    // Injects the path of the current file
-    opts.filename = file.path;
+    // Injects the path of the current file & fix paths if Windows style paths
+    opts.filename = file.path.split(path.sep).join('/');
 
     // Bootstrap source maps
     if (file.sourceMap) { opts.sourcemap = true; }
 
     less.render(str, opts).then(function(res) {
       file.contents = new Buffer(res.result);
+      file.relPath = file.relative;
       file.path = gutil.replaceExtension(file.path, '.css');
       if (res.sourcemap) {
         res.sourcemap.file = file.path;
+        res.sourcemap.sources = res.sourcemap.sources.map(function() {
+          return file.relPath;
+        });
         applySourceMap(file, res.sourcemap);
       }
       return file;
