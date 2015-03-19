@@ -19,16 +19,16 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-    "accord": "^0.15.1",
-    "gulp-util": "^3.0.1",
-    "less": "^2.1.1",
+    "accord": "^0.15.2",
+    "gulp-util": "^3.0.4",
+    "less": "^2.4.0",
     "object-assign": "^2.0.0",
     "through2": "^0.6.3",
     "vinyl-sourcemaps-apply": "^0.1.4"
   },
   "devDependencies": {
-    "should": "^4.4.2",
+    "jshint": "^2.4.1",
     "mocha": "^2.1.0",
-    "jshint": "^2.4.1"
+    "should": "^4.6.5"
   }
 }
