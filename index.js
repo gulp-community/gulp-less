@@ -40,7 +40,9 @@ module.exports = function (options) {
       file.path = gutil.replaceExtension(file.path, '.css');
       if (res.sourcemap) {
         res.sourcemap.file = file.path;
+        makePathsRelative(file, res.sourcemap);
         applySourceMap(file, res.sourcemap);
+        file.sourceMap.file = file.relative;
       }
       return file;
     }).then(function(file) {
@@ -57,3 +59,9 @@ module.exports = function (options) {
     }).done(undefined, cb);
   });
 };
+
+function makePathsRelative(file, sourcemap) {
+  for (var i = 0; i < sourcemap.sources.length; i++) {
+    sourcemap.sources[i] = path.relative(file.base, sourcemap.sources[i]);
+  }
+}
