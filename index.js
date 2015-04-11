@@ -1,12 +1,11 @@
+var less           = require('less');
 var path           = require('path');
-var accord         = require('accord');
 var through2       = require('through2');
 var gutil          = require('gulp-util');
 var assign         = require('object-assign');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 
 var PluginError    = gutil.PluginError;
-var less           = accord.load('less');
 
 module.exports = function (options) {
   // Mixes in default options.
@@ -32,34 +31,32 @@ module.exports = function (options) {
     // Injects the path of the current file
     opts.filename = file.path;
 
-    // Bootstrap source maps
-    if (file.sourceMap) {
-      var basepath = path.resolve(file.base);
+    // Bootstrap source maps, but only if not configured by the user
+    if (file.sourceMap && !opts.sourceMap) {
       opts.sourceMap = {
-        sourceMapBasepath: basepath,
-        sourceMapRootpath: basepath
+        sourceMapBasepath: path.resolve(file.base)
       };
     }
 
-    less.render(str, opts).then(function(res) {
-      file.contents = new Buffer(res.result);
-      file.path = gutil.replaceExtension(file.path, '.css');
-      if (res.sourcemap) {
-        res.sourcemap.file = file.path;
-        applySourceMap(file, res.sourcemap);
+    less.render(str, opts, function (error, output) {
+      if (error) {
+        error.lineNumber = error.line;
+        error.fileName = error.filename;
+
+        // Add a better error message
+        error.message = error.message + ' in file ' + error.fileName + ' line no. ' + error.lineNumber;
+
+        cb(new PluginError('gulp-less', error));
+      } else {
+        file.contents = new Buffer(output.css);
+        file.path = gutil.replaceExtension(file.path, '.css');
+        if (output.map) {
+          var map = JSON.parse(output.map);
+          map.file = file.relative;
+          applySourceMap(file, map);
+        }
+        cb(null, file);
       }
-      return file;
-    }).then(function(file) {
-      cb(null, file);
-    }).catch(function(err) {
-      // Convert the keys so PluginError can read them
-      err.lineNumber = err.line;
-      err.fileName = err.filename;
-
-      // Add a better error message
-      err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
-
-      throw new PluginError('gulp-less', err);
-    }).done(undefined, cb);
+    });
   });
 };
