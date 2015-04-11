@@ -34,8 +34,10 @@ module.exports = function (options) {
 
     // Bootstrap source maps
     if (file.sourceMap) {
+      var basepath = path.resolve(file.base);
       opts.sourceMap = {
-        sourceMapBasepath: path.resolve(file.base)
+        sourceMapBasepath: basepath,
+        sourceMapRootpath: basepath
       };
     }
 
