@@ -33,17 +33,17 @@ module.exports = function (options) {
     opts.filename = file.path;
 
     // Bootstrap source maps
-    if (file.sourceMap) { opts.sourcemap = true; }
+    if (file.sourceMap) {
+      opts.sourceMap = {
+        sourceMapBasepath: path.resolve(file.base)
+      };
+    }
 
     less.render(str, opts).then(function(res) {
       file.contents = new Buffer(res.result);
       file.path = gutil.replaceExtension(file.path, '.css');
       if (res.sourcemap) {
-        res.sourcemap.file = file.relative;
-        res.sourcemap.sources = res.sourcemap.sources.map(function (source) {
-          return path.relative(file.base, source);
-        });
-
+        res.sourcemap.file = file.path;
         applySourceMap(file, res.sourcemap);
       }
       return file;
