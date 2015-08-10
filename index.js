@@ -65,6 +65,7 @@ module.exports = function (options) {
         throw pluginError;
       } else {
         gutil.log(pluginError.toString());
+        file.less = { error: pluginError };
         cb(null, file);
       }
     }).done(undefined, cb);
