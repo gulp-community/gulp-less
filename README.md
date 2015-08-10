@@ -36,6 +36,8 @@ The options you can use [can be found here](http://lesscss.org/#using-less-confi
 
 The `filename` option is not necessary, it's handled automatically by this plugin. The `compress` option is not supported -- if you are trying to minify your css, use [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css). No `sourceMap` options are supported -- if you are trying to generate sourcemaps, use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).
 
+Additionally there is the `failOnError` boolean option that will print the error to the console instead of throwing it when it is set to false.  This is useful when using `gulp.watch` so it does not force you to restart gulp after encountering an error.
+
 ## Minifying CSS
 
 If you want to minify/compress your css, you can use either the [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css) plugin for gulp, or the [less-clean-css](https://github.com/less/less-plugin-clean-css) plugin for less. Examples of both are shown below:

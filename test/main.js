@@ -83,6 +83,26 @@ describe('gulp-less', function () {
       stream.end();
     });
 
+    it('should return file with error when less contains errors', function (done) {
+      var errorCalled = false;
+      var stream = less({failOnError: false});
+      var errorFile = createVinyl('somefile.less',
+        new Buffer('html { color: @undefined-variable; }'));
+      stream.once('data', function (cssFile) {
+        should.exist(cssFile.less);
+        should.exist(cssFile.less.error)
+        cssFile.less.error.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
+        errorCalled = true;
+        errorCalled.should.equal(true);
+        done();
+      });
+      stream.once('end', function(){
+        errorCalled.should.equal(true);
+      });
+      stream.write(errorFile);
+      stream.end();
+    });
+
     it('should compile multiple less files', function (done) {
       var files = [
         createVinyl('buttons.less'),

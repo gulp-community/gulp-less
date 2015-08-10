@@ -12,7 +12,8 @@ module.exports = function (options) {
   // Mixes in default options.
   options = assign({}, {
       compress: false,
-      paths: []
+      paths: [],
+      failOnError: true
     }, options);
 
   return through2.obj(function(file, enc, cb) {
@@ -57,7 +58,16 @@ module.exports = function (options) {
       // Add a better error message
       err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
 
-      throw new PluginError('gulp-less', err);
+      // Make sure that we are only failing on an error if we want to, otherwise
+      // we print the information out
+      var pluginError = new PluginError('gulp-less', err, {showProperties: false});
+      if (opts.failOnError) {
+        throw pluginError;
+      } else {
+        gutil.log(pluginError.toString());
+        file.less = { error: pluginError };
+        cb(null, file);
+      }
     }).done(undefined, cb);
   });
 };
