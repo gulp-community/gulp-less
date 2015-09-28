@@ -28,7 +28,13 @@ module.exports = function (options) {
 
     // Clones the options object
     var opts = assign({}, options);
-
+    
+    // If relativeUrls is set move the value from options to opts 
+    if (options.hasOwnProperty('relativeUrls')) {
+      opts.relativeUrls = options.relativeUrls;
+      delete options.relativeUrls;
+    }
+    
     // Injects the path of the current file
     opts.filename = file.path;
 
