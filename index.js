@@ -34,6 +34,7 @@ module.exports = function (options) {
       opts.relativeUrls = options.relativeUrls;
       delete options.relativeUrls;
     }
+    
     // Injects the path of the current file
     opts.filename = file.path;
 
