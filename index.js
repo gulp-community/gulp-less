@@ -10,7 +10,7 @@ var less           = accord.load('less');
 
 module.exports = function (options) {
   // Mixes in default options.
-  options = assign({}, {
+  opts = assign({}, {
       compress: false,
       paths: []
     }, options);
@@ -26,14 +26,13 @@ module.exports = function (options) {
 
     var str = file.contents.toString();
 
-    // Clones the options object
-    var opts = assign({}, options);
-
     // Injects the path of the current file
     opts.filename = file.path;
 
     // Bootstrap source maps
-    if (file.sourceMap) { opts.sourcemap = true; }
+    if (file.sourceMap) {
+      opts.sourcemap = true;
+    }
 
     less.render(str, opts).then(function(res) {
       file.contents = new Buffer(res.result);
@@ -56,8 +55,7 @@ module.exports = function (options) {
 
       // Add a better error message
       err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
-
-      throw new PluginError('gulp-less', err);
-    }).done(undefined, cb);
+      return cb(new PluginError('gulp-less', err));
+    });
   });
 };
