@@ -10,7 +10,7 @@ var less           = accord.load('less');
 
 module.exports = function (options) {
   // Mixes in default options.
-  opts = assign({}, {
+  var opts = assign({}, {
       compress: false,
       paths: []
     }, options);
