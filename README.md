@@ -70,7 +70,7 @@ Less now supports plugins, which can add additional functionality like minifying
 var LessPluginCleanCSS = require('less-plugin-clean-css'),
     LessPluginAutoPrefix = require('less-plugin-autoprefix'),
     cleancss = new LessPluginCleanCSS({ advanced: true }),
-    autoprefix= new LessPluginAutoPrefix({ browsers: ["last 2 versions"] });
+    autoprefix = new LessPluginAutoPrefix({ browsers: ["last 2 versions"] });
 
 gulp.src('./less/**/*.less')
   .pipe(less({
