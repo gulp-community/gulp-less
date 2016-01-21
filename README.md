@@ -6,6 +6,30 @@ A LESS plugin for Gulp
 [![NPM Version](https://img.shields.io/npm/v/gulp-less.svg)](https://www.npmjs.com/package/gulp-less)
 [![Build Status](https://img.shields.io/travis/plus3network/gulp-less.svg)](https://travis-ci.org/plus3network/gulp-less)
 
+## Information
+
+<table>
+<tr>
+<td>Package</td><td>gulp-less</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Less plugin for gulp</td>
+</tr>
+<tr>
+<td>Node Version</td>
+<td>>= 0.10</td>
+</tr>
+<tr>
+<td>Less Version</td>
+<td>>= 2.x</td>
+</tr>
+<tr>
+<td>Gulp Version</td>
+<td>3.x</td>
+</tr>
+</table>
+
 ## Installation
 
 ```

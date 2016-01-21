@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git://github.com/plus3network/gulp-less.git"
   },
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "keywords": [
     "gulpplugin",
     "gulp",
@@ -17,10 +20,9 @@
   ],
   "author": "Chris Cowan",
   "license": "MIT",
-  "readmeFilename": "README.md",
   "dependencies": {
     "accord": "^0.20.1",
-    "gulp-util": "^3.0.6",
+    "gulp-util": "^3.0.7",
     "less": "^2.5.1",
     "object-assign": "^4.0.1",
     "through2": "^2.0.0",
