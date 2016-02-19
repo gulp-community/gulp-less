@@ -62,7 +62,7 @@ The `filename` option is not necessary, it's handled automatically by this plugi
 
 ## Minifying CSS
 
-If you want to minify/compress your css, you can use either the [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css) plugin for gulp, or the [less-clean-css](https://github.com/less/less-plugin-clean-css) plugin for less. Examples of both are shown below:
+If you want to minify/compress your css, you can use either the [gulp-cssnano](https://www.npmjs.com/package/gulp-cssnano) plugin for gulp, or the [less-clean-css](https://github.com/less/less-plugin-clean-css) plugin for less. Examples of both are shown below:
 
 ```js
 // Using a less plugin to minify css
@@ -78,11 +78,11 @@ gulp.src('./less/**/*.less')
 
 ```js
 // Using a gulp plugin to minify css
-var minifyCSS = require('gulp-minify-css');
+var cssnano = require('gulp-cssnano');
 
 gulp.src('./less/**/*.less')
   .pipe(less())
-  .pipe(minifyCSS())
+  .pipe(cssnano())
   .pipe(gulp.dest('./public/css'));
 ```
 
