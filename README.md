@@ -58,7 +58,7 @@ The options you can use [can be found here](http://lesscss.org/#using-less-confi
 - `paths`: Array of paths to be used for `@import` directives
 - `plugins`: Array of less plugins ([details](#using-plugins))
 
-The `filename` option is not necessary, it's handled automatically by this plugin. The `compress` option is not supported -- if you are trying to minify your css, use [gulp-minify-css](https://github.com/jonathanepollack/gulp-minify-css). No `sourceMap` options are supported -- if you are trying to generate sourcemaps, use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).
+The `filename` option is not necessary, it's handled automatically by this plugin. The `compress` option is not supported -- if you are trying to minify your css, use [gulp-cssnano](https://github.com/ben-eb/cssnano). No `sourceMap` options are supported -- if you are trying to generate sourcemaps, use [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).
 
 ## Minifying CSS
 
