@@ -4,7 +4,7 @@
   "description": "Less for Gulp",
   "main": "index.js",
   "scripts": {
-    "test": "jshint index.js && node_modules/.bin/mocha"
+    "test": "jshint index.js && mocha"
   },
   "repository": {
     "type": "git",
@@ -20,16 +20,19 @@
   ],
   "author": "Chris Cowan",
   "license": "MIT",
+  "peerDependencies": {
+    "less": ">=2.x"
+  },
   "dependencies": {
     "accord": "^0.23.0",
     "gulp-util": "^3.0.7",
-    "less": "^2.6.0",
     "object-assign": "^4.0.1",
     "through2": "^2.0.0",
     "vinyl-sourcemaps-apply": "^0.2.0"
   },
   "devDependencies": {
     "jshint": "^2.4.1",
+    "less": "^2.6.0",
     "mocha": "^2.4.5",
     "should": "^7.1.1"
   }
