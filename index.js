@@ -59,3 +59,8 @@ module.exports = function (options) {
     });
   });
 };
+
+module.exports.logError = function (error) {
+  gutil.log(error.toString());
+  this.emit('end');
+};
