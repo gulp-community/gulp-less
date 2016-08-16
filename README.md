@@ -112,7 +112,7 @@ This behaviour will terminate a gulp.watch, so to log the error and continue:
   .pipe(less().on('error',less.logError))
 ```
 
-To handle errors all errors from the chain with one handler, check out the error 
+To handle all errors from the chain with one handler, check out the error 
 handling documentation [here](https://github.com/gulpjs/gulp/blob/master/docs/recipes/combining-streams-to-handle-errors.md)
 
 ## License
