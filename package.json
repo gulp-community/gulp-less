@@ -21,7 +21,7 @@
   "author": "Chris Cowan",
   "license": "MIT",
   "dependencies": {
-    "accord": "^0.26.0",
+    "accord": "^0.26.1",
     "gulp-util": "^3.0.7",
     "less": "2.6.x || ^2.7.1",
     "object-assign": "^4.0.1",
