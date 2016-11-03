@@ -1,6 +1,6 @@
 {
   "name": "gulp-less",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Less for Gulp",
   "main": "index.js",
   "scripts": {
