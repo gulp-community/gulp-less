@@ -49,7 +49,8 @@ module.exports = function (options) {
     }).then(function(file) {
       cb(null, file);
     }).catch(function(err) {
-      // Convert the keys so PluginError can read them
+      // Add the keys so PluginError can read them
+      err.formattedMessage = less.engine.formatError(err, { color: true });      
       err.lineNumber = err.line;
       err.fileName = err.filename;
 
