@@ -50,7 +50,23 @@ gulp.task('less', function () {
     .pipe(gulp.dest('./public/css'));
 });
 ```
+### Error handling
+gulp process will be terminated when error occurs.
 
+The example below utilize [gulp-util](https://github.com/wearefractal/gulp-util) logging function for error handling and gulp process will be resumed even when error occurs.
+```javascript
+var less = require('gulp-less');
+var gutil = require('gulp-util');
+var path = require('path');
+
+gulp.task('less', function () {
+  gulp.src('./less/**/*.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'less', 'includes') ]
+    })).on('error', gutil.log)
+    .pipe(gulp.dest('./public/css'));
+});
+```
 ## Options
 
 The options you can use [can be found here](http://lesscss.org/#using-less-configuration). Below is a list of valid options as of the time of writing:
