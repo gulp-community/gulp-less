@@ -11,9 +11,9 @@ var less           = accord.load('less');
 module.exports = function (options) {
   // Mixes in default options.
   var opts = assign({}, {
-      compress: false,
-      paths: []
-    }, options);
+    compress: false,
+    paths: []
+  }, options);
 
   return through2.obj(function(file, enc, cb) {
     if (file.isNull()) {

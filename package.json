@@ -1,6 +1,6 @@
 {
   "name": "gulp-less",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Less for Gulp",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "author": "Chris Cowan",
   "license": "MIT",
   "dependencies": {
-    "accord": "^0.26.3",
+    "accord": "^0.27.3",
     "gulp-util": "^3.0.7",
     "less": "2.6.x || ^2.7.1",
     "object-assign": "^4.0.1",
@@ -29,8 +29,8 @@
     "vinyl-sourcemaps-apply": "^0.2.0"
   },
   "devDependencies": {
-    "jshint": "^2.4.1",
-    "mocha": "^3.0.2",
-    "should": "^11.1.0"
+    "jshint": "^2.9.4",
+    "mocha": "^3.4.2",
+    "should": "^11.2.0"
   }
 }
