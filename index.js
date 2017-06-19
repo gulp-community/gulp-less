@@ -8,7 +8,7 @@ var applySourceMap = require('vinyl-sourcemaps-apply');
 var PluginError    = gutil.PluginError;
 var less           = accord.load('less');
 
-module.exports = function (options) {
+module.exports = function (options, errorHandler) {
   // Mixes in default options.
   var opts = assign({}, {
     compress: false,
@@ -49,13 +49,20 @@ module.exports = function (options) {
     }).then(function(file) {
       cb(null, file);
     }).catch(function(err) {
-      // Convert the keys so PluginError can read them
-      err.lineNumber = err.line;
-      err.fileName = err.filename;
+      
+        if(typeof errorHandler == 'function') {
+            errorHandler(err);
+            return cb();
+        } else {
+            // Convert the keys so PluginError can read them
+            err.lineNumber = err.line;
+            err.fileName = err.filename;
 
-      // Add a better error message
-      err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
-      return cb(new PluginError('gulp-less', err));
+            // Add a better error message
+            err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
+            
+            return cb(new PluginError('gulp-less', err));
+        }
     });
   });
 };
