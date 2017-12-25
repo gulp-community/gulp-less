@@ -1,6 +1,6 @@
 var should = require('should');
 var less = require('../');
-var gutil = require('gulp-util');
+var File = require('vinyl')
 var fs = require('fs');
 var pj = require('path').join;
 
@@ -8,7 +8,7 @@ function createVinyl(lessFileName, contents) {
   var base = pj(__dirname, 'fixtures');
   var filePath = pj(base, lessFileName);
 
-  return new gutil.File({
+  return new File({
     cwd: __dirname,
     base: base,
     path: filePath,

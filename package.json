@@ -22,15 +22,17 @@
   "license": "MIT",
   "dependencies": {
     "accord": "^0.27.3",
-    "gulp-util": "^3.0.7",
     "less": "2.6.x || ^2.7.1",
     "object-assign": "^4.0.1",
+    "plugin-error": "^0.1.2",
+    "replace-ext": "^1.0.0",
     "through2": "^2.0.0",
     "vinyl-sourcemaps-apply": "^0.2.0"
   },
   "devDependencies": {
     "jshint": "^2.9.4",
     "mocha": "^3.4.2",
-    "should": "^11.2.0"
+    "should": "^11.2.0",
+    "vinyl": "^2.1.0"
   }
 }
