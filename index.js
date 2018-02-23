@@ -34,6 +34,8 @@ module.exports = function (options) {
       opts.sourcemap = true;
     }
 
+    var _this = this, cachedErr;
+
     less.render(str, opts).then(function(res) {
       file.contents = new Buffer(res.result);
       file.path = replaceExt(file.path, '.css');
@@ -55,7 +57,10 @@ module.exports = function (options) {
 
       // Add a better error message
       err.message = err.message + ' in file ' + err.fileName + ' line no. ' + err.lineNumber;
-      return cb(new PluginError('gulp-less', err));
+      return cb(cachedErr = new PluginError('gulp-less', err));
+    }).catch(function (err) {
+      // For error in previous catch block - output details different way if stream is already locked (stream._transformState.writecb == null)
+      return _this.emit('error', (err instanceof Error && (err.message && err.message.indexOf('no writecb in Transform class')>=0)) ? cachedErr : err);
     });
   });
 };
