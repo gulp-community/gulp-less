@@ -21,8 +21,8 @@
   "author": "Chris Cowan",
   "license": "MIT",
   "dependencies": {
-    "accord": "^0.28.0",
-    "less": "2.6.x || ^2.7.1",
+    "accord": "^0.29.0",
+    "less": "2.6.x || ^3.0.0",
     "object-assign": "^4.0.1",
     "plugin-error": "^0.1.2",
     "replace-ext": "^1.0.0",
