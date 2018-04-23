@@ -22,15 +22,15 @@
   "license": "MIT",
   "dependencies": {
     "accord": "^0.29.0",
-    "less": "2.6.x || ^3.0.0",
+    "less": "2.6.x || ^3.0.2",
     "object-assign": "^4.0.1",
     "plugin-error": "^0.1.2",
     "replace-ext": "^1.0.0",
-    "through2": "^2.0.0",
+    "through2": "^2.0.3",
     "vinyl-sourcemaps-apply": "^0.2.0"
   },
   "devDependencies": {
-    "jshint": "^2.9.4",
+    "jshint": "^2.9.5",
     "mocha": "^3.4.2",
     "should": "^11.2.0",
     "vinyl": "^2.1.0"
