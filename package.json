@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "accord": "^0.29.0",
-    "less": "2.6.x || ^3.0.0",
+    "less": "2.6.x || ^3.7.1",
     "object-assign": "^4.0.1",
     "plugin-error": "^0.1.2",
     "replace-ext": "^1.0.0",
