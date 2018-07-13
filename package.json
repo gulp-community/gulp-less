@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/plus3network/gulp-less.git"
+    "url": "git://github.com/gulp-community/gulp-less.git"
   },
   "engines": {
     "node": ">=0.10.0"

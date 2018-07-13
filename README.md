@@ -4,7 +4,7 @@
 > A [LESS](http://lesscss.org/) plugin for Gulp
 
 [![NPM Version](https://img.shields.io/npm/v/gulp-less.svg)](https://www.npmjs.com/package/gulp-less)
-[![Build Status](https://img.shields.io/travis/stevelacy/gulp-less.svg)](https://travis-ci.org/stevelacy/gulp-less)
+[![Build Status](https://img.shields.io/travis/gulp-community/gulp-less.svg)](https://travis-ci.org/gulp-community/gulp-less)
 
 ## Information
 
@@ -22,7 +22,7 @@
 </tr>
 <tr>
 <td>Less Version</td>
-<td>2.x</td>
+<td>2.x | 3.7+</td>
 </tr>
 <tr>
 <td>Gulp Version</td>
