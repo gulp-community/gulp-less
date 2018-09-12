@@ -35,13 +35,14 @@ module.exports = function (options) {
     }
 
     less.render(str, opts).then(function(res) {
+      var date = new Date();
+      
       file.contents = new Buffer(res.result);
       file.path = replaceExt(file.path, '.css');
-      
+	    
       // New/updated css file should have updated times
-			let date = new Date();
-			file.stat.atime = date;
-			file.stat.mtime = date;
+      file.stat.atime = date;
+      file.stat.mtime = date;
       
       if (res.sourcemap) {
         res.sourcemap.file = file.relative;
