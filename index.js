@@ -35,15 +35,8 @@ module.exports = function (options) {
     }
 
     less.render(str, opts).then(function(res) {
-      var date = new Date();
-      
       file.contents = new Buffer(res.result);
       file.path = replaceExt(file.path, '.css');
-	    
-      // New/updated css file should have updated times
-      file.stat.atime = date;
-      file.stat.mtime = date;
-      
       if (res.sourcemap) {
         res.sourcemap.file = file.relative;
         res.sourcemap.sources = res.sourcemap.sources.map(function (source) {
@@ -54,6 +47,10 @@ module.exports = function (options) {
       }
       return file;
     }).then(function(file) {
+      var date = new Date();
+      // New/updated css file should have updated times
+      file.stat.atime = date;
+      file.stat.mtime = date;
       cb(null, file);
     }).catch(function(err) {
       // Convert the keys so PluginError can read them
