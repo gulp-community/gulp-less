@@ -47,11 +47,9 @@ module.exports = function (options) {
       }
       return file;
     }).then(function(file) {
-      var date = new Date();
       // New/updated css file should have updated times
-      if ( file && file.stat ) {
-        file.stat.atime = date;
-        file.stat.mtime = date;
+      if (file && file.stat && file.stat.mtime) {
+        file.stat.mtime = new Date();
       }
       cb(null, file);
     }).catch(function(err) {
