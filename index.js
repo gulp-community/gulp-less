@@ -47,10 +47,6 @@ module.exports = function (options) {
       }
       return file;
     }).then(function(file) {
-      // New/updated css file should have updated times
-      if (file && file.stat && file.stat.mtime) {
-        file.stat.mtime = new Date();
-      }
       cb(null, file);
     }).catch(function(err) {
       // Convert the keys so PluginError can read them
