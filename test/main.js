@@ -4,7 +4,7 @@ var File = require('vinyl')
 var fs = require('fs');
 var pj = require('path').join;
 
-function createVinyl(lessFileName, contents) {
+function createVinyl(lessFileName, contents, stats) {
   var base = pj(__dirname, 'fixtures');
   var filePath = pj(base, lessFileName);
 
@@ -12,7 +12,8 @@ function createVinyl(lessFileName, contents) {
     cwd: __dirname,
     base: base,
     path: filePath,
-    contents: contents || fs.readFileSync(filePath)
+    contents: contents || fs.readFileSync(filePath),
+    stat: stats === undefined ? {} : stats
   });
 }
 
@@ -64,6 +65,35 @@ describe('gulp-less', function () {
       stream.end();
     });
 
+    it('should set output file timestamps for single less file', function (done) {
+      var lessFile = createVinyl('buttons.less');
+      var startTime = new Date();
+
+      var stream = less();
+      stream.once('data', function (cssFile) {
+        should.exist(cssFile);
+        should.exist(cssFile.stat);
+        cssFile.stat.mtime.should.be.greaterThanOrEqual(startTime);
+        cssFile.stat.atime.should.be.greaterThanOrEqual(startTime);
+        done();
+      });
+      stream.write(lessFile);
+      stream.end();
+    });
+
+    it('should not fail if the output file does not have a stat property', function (done) {
+      var lessFile = createVinyl('buttons.less', undefined, null);
+
+      var stream = less();
+      stream.once('data', function (cssFile) {
+        should.exist(cssFile);
+        should.not.exist(cssFile.stat);
+        done();
+      });
+      stream.write(lessFile);
+      stream.end();
+    });
+
     it('should emit error when less contains errors', function (done) {
       var errorCalled = false;
       var stream = less();
@@ -97,6 +127,30 @@ describe('gulp-less', function () {
         should.exist(cssFile.path);
         should.exist(cssFile.relative);
         should.exist(cssFile.contents);
+        if (!--count) { done(); }
+      });
+
+      files.forEach(function (file) {
+        stream.write(file);
+      });
+      stream.end();
+    });
+
+    it('should set output file timestamps for multiple less files', function (done) {
+      var files = [
+        createVinyl('buttons.less'),
+        createVinyl('forms.less'),
+        createVinyl('normalize.less')
+      ];
+      var startTime = new Date();
+
+      var stream = less();
+      var count = files.length;
+      stream.on('data', function (cssFile) {
+        should.exist(cssFile);
+        should.exist(cssFile.stat);
+        cssFile.stat.mtime.should.be.greaterThanOrEqual(startTime);
+        cssFile.stat.atime.should.be.greaterThanOrEqual(startTime);
         if (!--count) { done(); }
       });
 

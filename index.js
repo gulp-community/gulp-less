@@ -47,6 +47,12 @@ module.exports = function (options) {
       }
       return file;
     }).then(function(file) {
+      if (file.stat) {
+        // Add output file modification timestamps for Gulp 4+ support
+        var now = new Date();
+        file.stat.atime = now;
+        file.stat.mtime = now;
+      }
       cb(null, file);
     }).catch(function(err) {
       // Convert the keys so PluginError can read them
