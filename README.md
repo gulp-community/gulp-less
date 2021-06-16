@@ -22,7 +22,7 @@
 </tr>
 <tr>
 <td>Less Version</td>
-<td>2.x | 3.7+</td>
+<td>3.7+ | 4.0+</td>
 </tr>
 <tr>
 <td>Gulp Version</td>
