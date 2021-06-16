@@ -68,7 +68,7 @@ describe('gulp-less', function () {
       var errorCalled = false;
       var stream = less();
       var errorFile = createVinyl('somefile.less',
-        new Buffer('html { color: @undefined-variable; }'));
+        Buffer.from('html { color: @undefined-variable; }'));
       stream.once('error', function (err) {
         err.message.should.equal('variable @undefined-variable is undefined in file '+errorFile.path+' line no. 1');
         errorCalled = true;

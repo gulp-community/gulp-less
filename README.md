@@ -18,7 +18,7 @@
 </tr>
 <tr>
 <td>Node Version</td>
-<td>>= 0.10</td>
+<td>>= 6</td>
 </tr>
 <tr>
 <td>Less Version</td>

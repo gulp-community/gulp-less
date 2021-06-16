@@ -86,7 +86,7 @@ module.exports = function (options) {
     }
 
     renderLess(str, opts).then(function(res) {
-      file.contents = new Buffer(res.result);
+      file.contents = Buffer.from(res.result);
       file.path = replaceExt(file.path, '.css');
       if (res.sourcemap) {
         res.sourcemap.file = file.relative;
